@@ -4,7 +4,7 @@ import { authGuard } from './core/guards/auth.guard';
 export const routes: Routes = [
   {
     path: 'auth',
-    loadComponent: () => import('./features/auth/pages/auth-index/auth-index.component'),
+    loadComponent: () => import('./features/auth/pages/auth-home/auth-home.component'),
     children:[
       {
         path: '',
@@ -38,6 +38,16 @@ export const routes: Routes = [
       {
         path: 'home',
         loadComponent: () => import('./features/customer/pages/customer-home/customer-home.component')
+      }
+    ]
+  },
+  {
+    path: 'docente',
+    loadComponent: () => import('./shared/layout/layout.component'),
+    children:[
+      {
+        path: 'home',
+        loadComponent: () => import('./features/teacher/pages/teacher-home/teacher-home.component')
       }
     ]
   },

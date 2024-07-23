@@ -4,8 +4,8 @@ import { RouterModule } from '@angular/router';
 @Component({
   standalone: true,
   imports: [RouterModule],
-  templateUrl: './auth-index.component.html',
+  templateUrl: './auth-home.component.html',
 })
-export default class AuthIndexComponent {
+export default class AuthHomeComponent {
 
 }

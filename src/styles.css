@@ -1,10 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'ngx-toastr/toastr';
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .main-container{
   background: #F0F2F5;
 }
-.active{
-  background: rebeccapurple;
+.dialog-class{
+  width: 70%;
+  border-radius: 10px;
+  background: #FFFF;
+  border-radius: 10px !important;
+}
+mat-card, mat-paginator, .mat-table, .mat-expansion-panel{
+  border-radius:  10px !important;
+}
+.mat-mdc-text-field-wrapper{
+  background: #d0d2db66 !important;
 }

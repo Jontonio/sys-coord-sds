@@ -1,12 +1,16 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MaterialModule } from '../../material/custom-material.module';
 
 @Component({
+  standalone:true,
+  imports:[MaterialModule],
   selector: 'app-confirm-dialog',
   templateUrl: './confirm-dialog.component.html',
   styleUrls: ['./confirm-dialog.component.css']
 })
 export class ConfirmDialogComponent {
+
   title: string;
   message: string;
 

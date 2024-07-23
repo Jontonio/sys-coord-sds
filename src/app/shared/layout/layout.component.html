@@ -29,12 +29,10 @@
 
     </mat-menu>
 
-
-
     <button mat-button [matMenuTriggerFor]="userMenu">
       <mat-icon>person</mat-icon>
       <span fxShow fxHide.xs>
-        José Antonio
+        {{userName}}
       </span>
     </button>
     <mat-menu #userMenu="matMenu" xPosition="before" yPosition="above" [overlapTrigger]="false">
@@ -59,23 +57,18 @@
       [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" class="sidenav">
 
       <mat-nav-list class="m-2">
-        <a mat-list-item routerLink="/dashboard/home" routerLinkActive="active">
-          <div class="flex align-items-center align-content-center">
-            <mat-icon mat-list-icon>
-              dashboard
-            </mat-icon>
-            <span mat-line class="ml-2"> Dashboard </span>
+        @for (item of listRoutes; track $index) {
+          <div *showForRoles="item.permitRoles">
+            <a mat-list-item [routerLink]="item.route" routerLinkActive="active" class="mt-1">
+              <div class="flex align-items-center align-content-center">
+                <mat-icon mat-list-icon>
+                  {{item.icon}}
+                </mat-icon>
+                <span mat-line class="ml-2"> {{item.nameRoute}} </span>
+              </div>
+            </a>
           </div>
-        </a>
-
-        <a mat-list-item [routerLink]="['/customer/home']" routerLinkActive="active">
-          <div class="flex align-items-center align-content-center">
-            <mat-icon mat-list-icon>
-              business
-            </mat-icon>
-            <span class="ml-2" mat-line> Customers </span>
-          </div>
-        </a>
+        }
 
         <a mat-list-item [routerLink]="['/auth/login']">
           <div class="flex align-items-center align-content-center">
@@ -97,8 +90,9 @@
         <!-- <mat-spinner class="spinner" [diameter]="50" *ngIf="showSpinner"></mat-spinner> -->
       </div>
 
-
-      <router-outlet></router-outlet>
+      <div class="m-3">
+        <router-outlet></router-outlet>
+      </div>
 
     </mat-sidenav-content>
   </mat-sidenav-container>
