@@ -1,0 +1,32 @@
+<div class="flex ai-center p-1 w-full justify-content-between mt-1">
+  <div class="flex justify-content-center align-items-center">
+    <mat-icon class="mr-3">
+      <ng-icon name="featherFileText"></ng-icon>
+    </mat-icon>
+    <div class="flex flex-column flex-grow-1">
+      <span class="file-name">flowbite</span>
+      <span class="file-type">PDF, 2.3 MB</span>
+    </div>
+  </div>
+  <div>
+    <button mat-icon-button class="btn-icon">
+        <ng-icon name="featherDownload"></ng-icon>
+    </button>
+    <button mat-icon-button class="btn-icon" (click)="previewFile()">
+        <ng-icon name="featherEye"></ng-icon>
+    </button>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>delete</mat-icon>
+        <span>Delete</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>edit</mat-icon>
+        <span>Edit</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>

@@ -52,6 +52,46 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'configuracion',
+    loadComponent: () => import('./shared/layout/layout.component'),
+    children:[
+      {
+        path: 'home',
+        loadComponent: () => import('./features/settings/pages/home/home.component')
+      }
+    ]
+  },
+  {
+    path: 'asignatura',
+    loadComponent: () => import('./shared/layout/layout.component'),
+    children:[
+      {
+        path: 'home',
+        loadComponent: () => import('./features/school-subject/pages/home/home.component')
+      }
+    ]
+  },
+  {
+    path: 'unidades-de-clase',
+    loadComponent: () => import('./shared/layout/layout.component'),
+    children:[
+      {
+        path: 'home',
+        loadComponent: () => import('./features/class-unit/pages/class-unit-home/class-unit-home.component')
+      }
+    ]
+  },
+  {
+    path: 'programacion-academica',
+    loadComponent: () => import('./shared/layout/layout.component'),
+    children:[
+      {
+        path: 'home',
+        loadComponent: () => import('./features/program-academic/pages/program-academic-home/program-academic-home.component')
+      }
+    ]
+  },
+  {
     path: '**',
     redirectTo: 'auth',
     pathMatch: 'full'

@@ -38,12 +38,18 @@
   flex: 1 0 auto;
 }
 
+.sidenav{
+  background: #ffffff;
+}
+.item-menu{
+  color: rgb(33, 33, 33) !important;
+}
 /*Set sidenav width*/
 
 mat-sidenav {
   min-width: 180px !important;
   width: 280px;
-  border-right: 1px solid #eee;
+  /* border-right: 1px solid #eee; */
   box-shadow: 6px 0 6px rgba(0, 0, 0, .1);
   border-radius: 0px !important;
 }
@@ -54,9 +60,6 @@ mat-sidenav {
   height: 5px;
 }
 
-a.mat-list-item.active {
-  background: rgba(0, 0, 0, .04);
-}
 .active{
   background: rgba(27, 27, 27, 0.195);
 }

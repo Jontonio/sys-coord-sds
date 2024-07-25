@@ -1,10 +1,13 @@
 <div class="p-4 mat-dialog-container">
-  <p>Registrar docente</p>
+  <div class="flex flex-column">
+    <h5 class="m-0">Formulario docente</h5>
+    <p>Complete todos los campos</p>
+  </div>
   <form [formGroup]="formTeacher" class="example-form">
 
     <table class="w-full" cellspacing="1"><tr>
       <td>
-        <mat-form-field class="w-full" appearance="fill">
+        <mat-form-field class="w-full" appearance="outline">
           <mat-label>Tipo de documento</mat-label>
           <mat-select formControlName="type_id_card">
             @for (item of listTypeDocuments; track $index) {
@@ -21,7 +24,7 @@
       </td>
       <td></td>
       <td>
-        <mat-form-field class="w-full" appearance="fill">
+        <mat-form-field class="w-full" appearance="outline">
           <mat-label>DNI</mat-label>
           <input matInput formControlName="id_card" maxlength="8" minlength="8">
           @if (id_card.hasError('pattern') && !id_card.hasError('required')) {
@@ -40,7 +43,7 @@
       </td>
     </tr></table>
 
-    <mat-form-field class="w-full mt-1" appearance="fill">
+    <mat-form-field class="w-full mt-1" appearance="outline">
       <mat-label>Nombres</mat-label>
       <input type="text" matInput formControlName="name" [errorStateMatcher]="matcher">
       @if (name.hasError('pattern') && !email.hasError('required')) {
@@ -57,7 +60,7 @@
     <table class="w-full mt-1" cellspacing="1">
       <tr>
         <td>
-          <mat-form-field class="w-full mt-1" appearance="fill">
+          <mat-form-field class="w-full mt-1" appearance="outline">
             <mat-label>Apellido paterno</mat-label>
             <input matInput formControlName="first_name">
             @if (first_name.hasError('pattern') && !first_name.hasError('required')) {
@@ -70,7 +73,7 @@
         </td>
         <td></td>
         <td>
-          <mat-form-field class="w-full mt-1" appearance="fill">
+          <mat-form-field class="w-full mt-1" appearance="outline">
           <mat-label>Apellido materno</mat-label>
           <input matInput formControlName="last_name">
           @if (last_name.hasError('pattern') && !last_name.hasError('required')) {
@@ -84,7 +87,7 @@
       </tr>
     </table>
 
-    <mat-form-field class="w-full mt-1" appearance="fill">
+    <mat-form-field class="w-full mt-1" appearance="outline">
       <mat-label>Email</mat-label>
       <input type="email" matInput formControlName="email" [errorStateMatcher]="matcher">
       @if (email.hasError('email') && !email.hasError('required')) {
@@ -95,7 +98,7 @@
       }
     </mat-form-field>
 
-    <mat-form-field class="w-full mt-1" appearance="fill">
+    <mat-form-field class="w-full mt-1" appearance="outline">
       <mat-label>Número de celular</mat-label>
       <input type="text" matInput formControlName="celphone_number" [errorStateMatcher]="matcher">
       @if (celphone_number.hasError('pattern') && !celphone_number.hasError('required')) {

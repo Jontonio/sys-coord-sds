@@ -1,15 +1,17 @@
 import { Component, inject } from '@angular/core';
-import { ErrorStateMatcher } from '@angular/material/core';
 import { MaterialModule } from '../../../../material/custom-material.module';
 import { TeacherTableComponent } from "../teacher-table/teacher-table.component";
 import { MatDialog } from '@angular/material/dialog';
 import { TeacherFormComponent } from '../teacher-form/teacher-form.component';
-import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { heroUsers } from '@ng-icons/heroicons/outline';
+import { iconsList } from '../../../../shared/icons/icons';
 
 
 @Component({
   standalone: true,
-  imports: [MaterialModule, TeacherTableComponent, TeacherTableComponent],
+  imports: [MaterialModule, NgIconComponent, TeacherTableComponent, TeacherTableComponent],
+  providers: [provideIcons({ ...iconsList, heroUsers })],
   selector: 'app-teacher-list',
   templateUrl: './teacher-list.component.html',
   styleUrl: './teacher-list.component.css'

@@ -8,11 +8,15 @@ import { RouterModule } from '@angular/router';
 import { MainRoute } from '../interface/main-routes';
 import { AuthenticationService } from '../../core/services/auth.service';
 import { ShowForRolesDirective } from '../../features/directives/show-for-roles.directive';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { heroUsers } from '@ng-icons/heroicons/outline';
+import { iconsList } from '../icons/icons';
 
 @Component({
     selector: 'app-layout',
     standalone:true,
-    imports:[MaterialModule, RouterModule, ShowForRolesDirective],
+    imports:[MaterialModule, RouterModule, ShowForRolesDirective, NgIconComponent],
+    providers: [provideIcons({ ...iconsList, heroUsers })],
     templateUrl: './layout.component.html',
     styleUrls: ['./layout.component.css'],
 })
@@ -27,25 +31,37 @@ export default class LayoutComponent implements OnDestroy, AfterViewInit {
     {
       nameRoute: "Dashboard",
       route: "/dashboard/home",
-      icon: "dashboard",
-      permitRoles:['USER_ROOT','UGEL_USER','DIRECTOR_USER','COORD_USER']
+      icon: "featherHome",
+      permitRoles:['USER_ROOT','UGEL_USER','DIRECTOR_USER','COORD_USER','DOCENTE']
+    },
+    {
+      nameRoute: "Programación académica",
+      route: "/programacion-academica/home",
+      icon: "featherCalendar",
+      permitRoles:['DOCENTE']
     },
     {
       nameRoute: "Docentes",
       route: "/docente/home",
-      icon: "groups",
+      icon: "featherUsers",
       permitRoles:['USER_ROOT','UGEL_USER','DIRECTOR_USER','COORD_USER']
     },
     {
-      nameRoute: "Grado y sección",
-      route: "#",
-      icon: "account_tree",
+      nameRoute: "Asignaturas",
+      route: "/asignatura/home",
+      icon: "featherBook",
       permitRoles:['USER_ROOT','UGEL_USER','DIRECTOR_USER']
     },
     {
-      nameRoute: "Areas",
-      route: "#",
-      icon: "menu_book",
+      nameRoute: "Unidades",
+      route: "/unidades-de-clase/home",
+      icon: "featherArchive",
+      permitRoles:['USER_ROOT','UGEL_USER','DIRECTOR_USER','COORD_USER','DOCENTE']
+    },
+    {
+      nameRoute: "Configuración",
+      route: "/configuracion/home",
+      icon: "featherSettings",
       permitRoles:['USER_ROOT','UGEL_USER','DIRECTOR_USER']
     },
     {

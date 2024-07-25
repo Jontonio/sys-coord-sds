@@ -33,6 +33,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { MatTreeModule } from '@angular/material/tree';
 
 export const MY_FORMATS = {
   parse: {
@@ -49,6 +50,7 @@ export const MY_FORMATS = {
 @NgModule({
   imports: [
     CommonModule,
+    MatTreeModule,
     MatSidenavModule, MatIconModule, MatToolbarModule, MatButtonModule,
     MatListModule, MatCardModule, MatProgressBarModule, MatInputModule,
     MatSnackBarModule, MatProgressSpinnerModule, MatDatepickerModule,
@@ -59,6 +61,7 @@ export const MY_FORMATS = {
   ],
   exports: [
     CommonModule,
+    MatTreeModule,
     MatSidenavModule, MatIconModule, MatToolbarModule, MatButtonModule,
     MatListModule, MatCardModule, MatProgressBarModule, MatInputModule,
     MatSnackBarModule, MatMenuModule, MatProgressSpinnerModule, MatDatepickerModule,

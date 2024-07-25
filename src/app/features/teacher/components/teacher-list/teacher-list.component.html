@@ -1,18 +1,18 @@
-<!-- header button -->
-<mat-card>
-  <mat-card-content>
-    <div class="flex justify-content-between flex-wrap">
-      <div class="col flex align-items-center">
-        <mat-icon>group</mat-icon>
-        <span class="ml-2">Docentes en la institución</span>
-      </div>
-        <button mat-mini-fab aria-label="Agregar nuevo docente" (click)="addTeacher()">
-          <mat-icon>add</mat-icon>
-        </button>
-    </div>
-  </mat-card-content>
-</mat-card>
+
 <!-- table -->
 <div class="mt-3">
+  <div class="flex justify-content-between flex-wrap">
+    <div class="col">
+      <h4 class="m-0">Docentes registrados</h4>
+      <p>La tabla muestra docentes registrados</p>
+    </div>
+    <div class="col flex align-items-center justify-content-end">
+      <button class="flex justify-content-center align-items-center" mat-mini-fab aria-label="Agregar nuevo docente" (click)="addTeacher()">
+        <mat-icon>
+          <ng-icon name="featherPlus" size="25"></ng-icon>
+        </mat-icon>
+      </button>
+    </div>
+  </div>
   <app-teacher-table></app-teacher-table>
 </div>

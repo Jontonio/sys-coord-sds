@@ -1,0 +1,18 @@
+
+<!-- table -->
+<div class="mt-3">
+  <div class="flex justify-content-between flex-wrap">
+    <div class="col">
+      <h4 class="m-0">Asignaturas registradas</h4>
+      <p>La tabla muestra asignaturas registradas</p>
+    </div>
+    <div class="col flex align-items-center justify-content-end">
+      <button class="flex justify-content-center align-items-center" mat-mini-fab aria-label="Agregar nueva asigantura" (click)="addNewSubject()">
+        <mat-icon>
+          <ng-icon name="featherPlus" size="25"></ng-icon>
+        </mat-icon>
+      </button>
+    </div>
+  </div>
+  <app-school-subject-table></app-school-subject-table>
+</div>

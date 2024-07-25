@@ -1,0 +1,47 @@
+<div class="p-4 mat-dialog-container">
+  <p>Registrar programación académica</p>
+  <div align="end">
+    <form method="post">
+
+      <mat-form-field class="w-full mt-1" appearance="fill">
+        <mat-label>Código modular</mat-label>
+        <input type="text" matInput>
+      </mat-form-field>
+
+      <mat-form-field class="w-full mt-1" appearance="fill">
+        <mat-label>Periodo</mat-label>
+        <mat-select formControlName="type_id_card">
+          @for (item of ['I','II','III']; track $index) {
+            <mat-option value="dni">{{item}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <table class="w-full mt-1" cellspacing="1">
+        <tr>
+          <td>
+            <mat-form-field class="w-full mt-1" appearance="fill">
+              <mat-label>Fecha de inicio</mat-label>
+              <input matInput [matDatepicker]="pickerStart">
+              <mat-hint></mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="pickerStart"></mat-datepicker-toggle>
+              <mat-datepicker #pickerStart></mat-datepicker>
+            </mat-form-field>
+          </td>
+          <td></td>
+          <td>
+            <mat-form-field class="w-full mt-1" appearance="fill">
+              <mat-label>Fecha de final</mat-label>
+              <input matInput [matDatepicker]="pickerFinish">
+              <mat-hint></mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="pickerFinish"></mat-datepicker-toggle>
+              <mat-datepicker #pickerFinish></mat-datepicker>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+      <button mat-button type="button" class="mr-1" (click)="closeDialog()">Cancelar</button>
+      <button mat-flat-button type="button">Registrar</button>
+    </form>
+  </div>
+</div>
