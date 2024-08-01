@@ -16,16 +16,23 @@ export class ShowForRolesDirective {
   constructor(private viewContainerRedf:ViewContainerRef, private templateRef:TemplateRef<any>) { }
 
   ngOnInit(): void {
-    //TODO: tener en cuenta el rol
-    const hasRole: boolean = Boolean(this.rolesPermitidos?.includes(this.authService.getCurrentUser().role));
-    this.sub$ = of(hasRole)
-    .pipe(
-      distinctUntilChanged(),
-      tap((hasRole) => hasRole
-        ? this.viewContainerRedf.createEmbeddedView(this.templateRef)
-        : this.viewContainerRedf.clear())
-    )
-    .subscribe();
+
+    const userAuth = this.authService.getUserAuth;
+
+    userAuth.roles.forEach( val => {
+
+      const hasRole: boolean = Boolean(this.rolesPermitidos?.includes(val.name.toUpperCase()));
+
+      this.sub$ = of(hasRole)
+      .pipe(
+        distinctUntilChanged(),
+        tap((hasRole) => hasRole
+          ? this.viewContainerRedf.createEmbeddedView(this.templateRef)
+          : this.viewContainerRedf.clear())
+      )
+      .subscribe();
+
+    })
   }
 
   ngOnDestroy(): void {

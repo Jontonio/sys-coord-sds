@@ -20,6 +20,15 @@
         {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
       </mat-icon>
     </button>
-    {{node.value}}
+    <div class="flex justify-content-center align-items-center">
+      <p class="mt-3">{{node.value.name}}</p>
+      @if (node.level==0) {
+        <div *showForRoles="['DOCENTE_USER']">
+          <button class="ml-2" mat-icon-button (click)="addFile()">
+            <mat-icon class="btn-icon"><ng-icon name="featherUpload"></ng-icon></mat-icon>
+          </button>
+        </div>
+      }
+    </div>
   </mat-tree-node>
 </mat-tree>

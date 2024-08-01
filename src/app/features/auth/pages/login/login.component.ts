@@ -44,7 +44,7 @@ export default class LoginComponent {
 
         this.loginForm = new UntypedFormGroup({
             email: new UntypedFormControl(savedUserEmail, [Validators.required, Validators.email]),
-            password: new UntypedFormControl('123456', Validators.required),
+            password: new UntypedFormControl(null, Validators.required),
             rememberMe: new UntypedFormControl(savedUserEmail !== null)
         });
     }
@@ -67,18 +67,13 @@ export default class LoginComponent {
         this.loading = true;
         // llamar endpoint
         this.authService.login(email, password).subscribe({
-          next:(value) => {
+          next:() => {
             this.loading = false;
             localStorage.setItem('savedUserEmail', email);
-            if(this.authService.roles.includes(email.split('@')[0])){
-              this.router.navigate(['/dashboard/home']);
-            }else{
-              this.toastr.error('algo salio mal', 'Error de auth');
-            }
+            this.router.navigate(['main/dashboard/home']);
           },
           error:(err) => {
             this.loading = false;
-            console.log(err)
           }
         })
     }

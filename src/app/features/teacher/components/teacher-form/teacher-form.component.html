@@ -45,14 +45,14 @@
 
     <mat-form-field class="w-full mt-1" appearance="outline">
       <mat-label>Nombres</mat-label>
-      <input type="text" matInput formControlName="name" [errorStateMatcher]="matcher">
-      @if (name.hasError('pattern') && !email.hasError('required')) {
+      <input type="text" matInput formControlName="names" [errorStateMatcher]="matcher">
+      @if (names.hasError('pattern') && !email.hasError('required')) {
         <mat-error>Digite un nombre válido</mat-error>
       }
-      @if (name.hasError('required')) {
+      @if (names.hasError('required')) {
         <mat-error>Este campo es <strong>requerido</strong></mat-error>
       }
-      @if (name.hasError('pattern') && !name.hasError('required')) {
+      @if (names.hasError('pattern') && !names.hasError('required')) {
         <mat-error class="p-error">Digite un nombre <strong>válido</strong></mat-error>
       }
     </mat-form-field>
@@ -66,7 +66,7 @@
             @if (first_name.hasError('pattern') && !first_name.hasError('required')) {
               <mat-error>Digite un apellido válido</mat-error>
             }
-            @if (name.hasError('required')) {
+            @if (first_name.hasError('required')) {
               <mat-error>Este campo es <strong>requerido</strong></mat-error>
             }
           </mat-form-field>
@@ -100,17 +100,17 @@
 
     <mat-form-field class="w-full mt-1" appearance="outline">
       <mat-label>Número de celular</mat-label>
-      <input type="text" matInput formControlName="celphone_number" [errorStateMatcher]="matcher">
-      @if (celphone_number.hasError('pattern') && !celphone_number.hasError('required')) {
+      <input type="text" matInput formControlName="phone_number" [errorStateMatcher]="matcher">
+      @if (phone_number.hasError('pattern') && !phone_number.hasError('required')) {
         <mat-error>Digite un número de celular válido</mat-error>
       }
-      @if (celphone_number.hasError('required')) {
+      @if (phone_number.hasError('required')) {
         <mat-error>Este campo es <strong>requerido</strong></mat-error>
       }
-      @if (celphone_number.hasError('maxlength')) {
+      @if (phone_number.hasError('maxlength')) {
         <mat-error>El número de celular debe tener máximo 9 <strong>dígitos</strong></mat-error>
       }
-      @if (celphone_number.hasError('minlength')) {
+      @if (phone_number.hasError('minlength')) {
         <mat-error>El número de celular debe tener mínimo 9 <strong>dígitos</strong></mat-error>
       }
     </mat-form-field>

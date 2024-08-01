@@ -1,9 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MaterialModule } from '../../../../material/custom-material.module';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { CommonModule } from '@angular/common';
 import { ClassUnitItemTreeComponent } from '../class-unit-item-tree/class-unit-item-tree.component';
+import { heroUsers } from '@ng-icons/heroicons/outline';
+import { iconsList } from '../../../../shared/icons/icons';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { ShowForRolesDirective } from '../../../directives/show-for-roles.directive';
+import { Dialog } from '@angular/cdk/dialog';
+import { LoadFileComponent } from '../../../../shared/components/load-file/load-file.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 interface FoodNode {
@@ -13,10 +20,10 @@ interface FoodNode {
 
 const TREE_DATA: FoodNode[] = [
   {
-    value: 'Ciencia y tecnología',
+    value: { name:"Ciencia y tecnología", id:10 },
     children: [
       {
-        value: 'Milagros Gomez Ramires',
+        value: { name:"Mario Gomez prueba", id:20 },
         children: [
           {
             value: { link: "test1", data: "http://localhost:4200/unidades-de-clase/home"},
@@ -30,20 +37,20 @@ const TREE_DATA: FoodNode[] = [
         ],
       },
       {
-        value: 'Maria Rivera',
+        value: { name:"Luisa Medina prueba", id:50 },
         children: [{value: 'Pumpkins'}, {value: 'Carrots'}],
       },
     ],
   },
   {
-    value: 'Matematicas',
+    value: { name:"Matematicas", id:60 },
     children: [
       {
-        value: 'Katerin Gomez Ramires',
+        value: { name:'Katerin Gomez Ramires prueba', id:80 },
         children: [{value: 'Archivo de unidad'}, {value: 'Brussels sprouts'}],
       },
       {
-        value: 'Mario Quillahuaman',
+        value: { name:'Mario prueba', id:100 },
         children: [{value: 'Pumpkins'}, {value: 'Carrots'}],
       },
     ],
@@ -60,11 +67,19 @@ interface ExampleFlatNode {
 @Component({
   selector: 'app-class-unit-tree',
   standalone: true,
-  imports: [MaterialModule, CommonModule, ClassUnitItemTreeComponent],
+  imports: [MaterialModule,
+            CommonModule,
+            ClassUnitItemTreeComponent,
+            ShowForRolesDirective,
+            NgIconComponent],
+  providers: [provideIcons({ ...iconsList, heroUsers })],
   templateUrl: './class-unit-tree.component.html',
   styleUrl: './class-unit-tree.component.css'
 })
 export class ClassUnitTreeComponent {
+
+  private dialog = inject(MatDialog)
+
   private _transformer = (node: FoodNode, level: number) => {
     return {
       expandable: !!node.children && node.children.length > 0,
@@ -92,4 +107,20 @@ export class ClassUnitTreeComponent {
   }
 
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
+
+  addFile() {
+
+    const dialogRef = this.dialog.open(LoadFileComponent, {
+      data: {name: "Messy", animal: "cat"},
+      disableClose: true,
+      autoFocus: false,
+      panelClass:'dialog-class',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      console.log(result);
+    });
+
+  }
 }

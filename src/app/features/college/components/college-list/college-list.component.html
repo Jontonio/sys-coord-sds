@@ -1,0 +1,53 @@
+<div class="m-3">
+  <div class="mat-dialog-container">
+    <div class="flex flex-column">
+      <h5 class="m-0">Colegiados</h5>
+      <p>Lista de colegiados registrados</p>
+    </div>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z0">
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="id_college">
+      <th mat-header-cell *matHeaderCellDef> N° </th>
+      <td mat-cell *matCellDef="let element; let i = index"> {{i + 1}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name_college">
+      <th mat-header-cell *matHeaderCellDef> Nombre del colegiado </th>
+      <td mat-cell *matCellDef="let element"> {{element.name_college}}</td>
+    </ng-container>
+
+    <!-- action Column -->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell class="mat-header-cell" *matHeaderCellDef> Acciones </th>
+      <td mat-cell class="mat-cell" *matCellDef="let element">
+        <button mat-icon-button class="btn-color" (click)="editSection()" disabled="true">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteSection()" disabled="true">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  @if (loadingService.getLoadding()) {
+    @for (item of [1,2,3,4,5,6,7,8,9]; track $index) {
+      <app-skeleton/>
+    }
+  }
+
+  @if (!loadingService.getLoadding() && dataSource.length==0) {
+    <app-show-empty-message/>
+  }
+
+  <div align="end">
+    <button mat-button type="button" class="mr-1" (click)="closeDialog()">Cancelar</button>
+  </div>
+</div>

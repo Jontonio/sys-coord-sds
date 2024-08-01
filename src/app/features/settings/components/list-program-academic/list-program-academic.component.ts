@@ -4,6 +4,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog.component';
 import { DialogModule, DialogRef } from '@angular/cdk/dialog';
 import { FormProgramAcademicComponent } from '../form-program-academic/form-program-academic.component';
+import { DbService } from '../../../../core/services/db.service';
+import { CacheService } from '../../../../core/services/cache.service';
+import { LoaddingService } from '../../../../core/services/loadding.service';
+import { SkeletonComponent } from '../../../../shared/components/skeleton/skeleton.component';
+import { ShowEmptyMessageComponent } from '../../../../shared/components/show-empty-message/show-empty-message.component';
 
 export interface PeriodicElement {
   name: string;
@@ -13,33 +18,50 @@ export interface PeriodicElement {
   document: string;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', document:'518598555', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', document:'518598555', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', document:'518598555', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', document:'518598555', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', document:'518598555', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', document:'518598555', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', document:'518598555', weight: 14.0067, symbol: 'N'},
-];
+const ELEMENT_DATA: PeriodicElement[] = [];
 
 @Component({
   selector: 'app-list-program-academic',
   standalone: true,
-  imports: [MaterialModule],
+  imports: [MaterialModule, SkeletonComponent, ShowEmptyMessageComponent],
   templateUrl: './list-program-academic.component.html',
   styleUrl: './list-program-academic.component.css'
 })
 export class ListProgramAcademicComponent {
 
-  displayedColumns: string[] = ['bimestre', 'date_start', 'date_finish', 'action'];
+  displayedColumns: string[] = ['id', 'academic_program_bim', 'academic_program_start', 'academic_program_finish', 'action'];
   dataSource = ELEMENT_DATA;
   dialog =  inject(MatDialog);
   dialogRef =  inject(DialogRef);
+  public dbService =  inject(DbService);
+  public cacheService =  inject(CacheService);
+  public loadingService =  inject(LoaddingService);
 
   closeDialog(){
     this.dialogRef.close(false);
   }
+
+  constructor() {
+
+  }
+
+  ngOnInit(): void {
+    if(this.cacheService.getAcademicCalendar() && this.cacheService.getCodeModularUser()){
+      const data = {
+        'modular_code':this.cacheService.getCodeModularUser(),
+        'id_academic_calendar': this.cacheService.getAcademicCalendar().id_academic_calendar }
+      this.getAcademicsProgramsFromIE(data);
+    }
+  }
+
+  getAcademicsProgramsFromIE({modular_code, id_academic_calendar}:any) {
+    this.dbService.getAcademicProgramsFromIE({modular_code, id_academic_calendar}).subscribe({
+      next:({ data }) => {
+        this.dataSource = data.data;
+      },
+    })
+  }
+
 
   editAcademicProgram() {
 

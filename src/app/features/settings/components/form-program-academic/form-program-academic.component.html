@@ -1,47 +1,91 @@
 <div class="p-4 mat-dialog-container">
-  <p>Registrar programación académica</p>
+  <div class="flex flex-column">
+    <h5 class="m-0">Programación académica</h5>
+    <p>Complete todos los campos</p>
+  </div>
   <div align="end">
-    <form method="post">
-
-      <mat-form-field class="w-full mt-1" appearance="fill">
-        <mat-label>Código modular</mat-label>
-        <input type="text" matInput>
+    <form [formGroup]="formAcademic" method="post">
+      <mat-form-field class="w-full mt-1" appearance="outline" *showForRoles="['ROOT_USER','UGEL_USER']">
+        <mat-label>id del calendario acádemico</mat-label>
+        <input type="text" matInput formControlName="id_academic_calendar">
+        @if (id_academic_calendar.hasError('pattern') && !id_academic_calendar.hasError('required')) {
+          <mat-error class="p-error">El calendario académico no es <strong>válido</strong></mat-error>
+        }
+        @else if (id_academic_calendar.hasError('required') && id_academic_calendar.dirty) {
+          <mat-error class="p-error">El campo es <strong>requerido</strong></mat-error>
+        }
       </mat-form-field>
-
-      <mat-form-field class="w-full mt-1" appearance="fill">
+      <mat-form-field class="w-full mt-1" appearance="outline" *showForRoles="['ROOT_USER','UGEL_USER']">
+        <mat-label>Código modular de la institución</mat-label>
+        <input type="text" matInput formControlName="modular_code" maxlength="7">
+        @if (modular_code.hasError('pattern') && !modular_code.hasError('required')) {
+          <mat-error class="p-error">El código modular no es <strong>válido</strong></mat-error>
+        }
+        @else if (modular_code.hasError('required') && modular_code.dirty) {
+          <mat-error class="p-error">El campo es <strong>requerido</strong></mat-error>
+        }
+        @else if (modular_code.hasError('maxlength') && modular_code.dirty) {
+          <mat-error class="p-error">El código modular debe tener como máximo 7 caracteres</mat-error>
+        }
+        @else if (modular_code.hasError('minlength') && modular_code.dirty) {
+          <mat-error class="p-error">El código modular debe tener como mínimo 7 caracteres</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field class="w-full mt-1" appearance="outline">
         <mat-label>Periodo</mat-label>
-        <mat-select formControlName="type_id_card">
-          @for (item of ['I','II','III']; track $index) {
-            <mat-option value="dni">{{item}}</mat-option>
+        <mat-select formControlName="academic_program_bim">
+          @for (item of ['I','II','III','IV','V','VI','VII','VIII','IX','X']; track $index) {
+            <mat-option [value]="item">{{item}}</mat-option>
           }
         </mat-select>
+        @if (academic_program_bim.hasError('pattern') && !academic_program_bim.hasError('required')) {
+          <mat-error class="p-error">El campo periodo no es <strong>válido</strong></mat-error>
+        }
+        @else if (academic_program_bim.hasError('required') && academic_program_bim.touched) {
+          <mat-error class="p-error">El campo es <strong>requerido</strong></mat-error>
+        }
       </mat-form-field>
 
       <table class="w-full mt-1" cellspacing="1">
         <tr>
           <td>
-            <mat-form-field class="w-full mt-1" appearance="fill">
+            <mat-form-field class="w-full mt-1" appearance="outline">
               <mat-label>Fecha de inicio</mat-label>
-              <input matInput [matDatepicker]="pickerStart">
+              <input matInput [matDatepicker]="pickerStart" formControlName="academic_program_start">
               <mat-hint></mat-hint>
               <mat-datepicker-toggle matIconSuffix [for]="pickerStart"></mat-datepicker-toggle>
               <mat-datepicker #pickerStart></mat-datepicker>
+              @if (academic_program_start.hasError('pattern') && !academic_program_start.hasError('required')) {
+                <mat-error class="p-error">El campo fecha de inicio no es <strong>válido</strong></mat-error>
+              }
+              @else if (academic_program_start.hasError('required') && academic_program_start.touched) {
+                <mat-error class="p-error">El campo es <strong>requerido</strong></mat-error>
+              }
             </mat-form-field>
           </td>
           <td></td>
           <td>
-            <mat-form-field class="w-full mt-1" appearance="fill">
+            <mat-form-field class="w-full mt-1" appearance="outline">
               <mat-label>Fecha de final</mat-label>
-              <input matInput [matDatepicker]="pickerFinish">
+              <input matInput [matDatepicker]="pickerFinish" formControlName="academic_program_finish">
               <mat-hint></mat-hint>
               <mat-datepicker-toggle matIconSuffix [for]="pickerFinish"></mat-datepicker-toggle>
               <mat-datepicker #pickerFinish></mat-datepicker>
+              @if (academic_program_start.hasError('pattern') && !academic_program_start.hasError('required')) {
+                <mat-error class="p-error">El campo fecha de final no es <strong>válido</strong></mat-error>
+              }
+              @else if (academic_program_start.hasError('required') && academic_program_start.touched) {
+                <mat-error class="p-error">El campo es <strong>requerido</strong></mat-error>
+              }
             </mat-form-field>
           </td>
         </tr>
       </table>
       <button mat-button type="button" class="mr-1" (click)="closeDialog()">Cancelar</button>
-      <button mat-flat-button type="button">Registrar</button>
+      <button mat-flat-button
+              type="button"
+              (click)="save()"
+              [disabled]="!cacheService.getCodeModularUser() || !cacheService.getAcademicCalendar()">Registrar</button>
     </form>
   </div>
 </div>

@@ -1,0 +1,33 @@
+
+<div class="p-4">
+    <div class="flex mb-2">
+        <mat-icon>
+          <ng-icon name="featherArchive"></ng-icon>
+        </mat-icon>
+        <p class="text-lg ml-1">Registro de unidad</p>
+    </div>
+    <div class="flex flex-column text-center">
+      <div
+        id="dropzone"
+        class="dropzone"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+      >
+        <p>Arrastra y suelta tus archivos aquí</p>
+        <div>
+          <input type="file" id="fileInput" class="file-input" multiple (change)="onFileChange($event)">
+          <button mat-stroked-button color="primary" onclick="document.getElementById('fileInput').click()">
+              {{files.length==0?"Seleciona tus archivos":
+              (files.length==1?"Un archivo selecionado":files.length + " archivos selecionados")}}
+          </button>
+      </div>
+      </div>
+
+    </div>
+    <div align="end" class="mt-4">
+      <button mat-button type="button" class="mr-1" mat-dialog-close="true">Cancelar</button>
+      <button mat-flat-button type="button">Subir</button>
+    </div>
+</div>
+

@@ -1,33 +1,22 @@
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpResponse } from '@angular/common/http';
-import { HttpRequest } from '@angular/common/http';
-import { HttpHandler } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { HttpInterceptorFn, HttpResponse } from '@angular/common/http';
 import { HttpEvent } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
+import { tap } from 'rxjs';
+import { LoaddingService } from '../services/loadding.service';
 
-import { SpinnerService } from './../services/spinner.service';
+export const SpinnerInterceptor: HttpInterceptorFn = (req, next) => {
 
-@Injectable()
-export class SpinnerInterceptor implements HttpInterceptor {
+    const loadingService = inject(LoaddingService);
+    loadingService.setLoadding(true);
 
-    constructor(private spinnerService: SpinnerService) { }
-
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
-        this.spinnerService.show();
-
-        return next
-            .handle(req)
-            .pipe(
-                tap((event: HttpEvent<any>) => {
-                    if (event instanceof HttpResponse) {
-                        this.spinnerService.hide();
-                    }
-                }, (error) => {
-                    this.spinnerService.hide();
-                })
-            );
-    }
+    return next(req)
+        .pipe(
+            tap((event: HttpEvent<any>) => {
+                if (event instanceof HttpResponse) {
+                    loadingService.setLoadding(false);
+                }
+            }, (error) => {
+                loadingService.setLoadding(false);
+            })
+        );
 }

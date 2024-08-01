@@ -1,0 +1,17 @@
+<div class="container-timeline scroll-content">
+  @for (item of items; track $index) {
+    <div class="flex-column col">
+      <div class="col time">
+          <div class="m-1">11/12/2024</div>
+          <div class="m-1">a</div>
+          <div class="m-1">11/12/2024</div>
+      </div>
+      <div class="col sub-time">
+        Periodo {{($index + 1) | toRoman}}
+      </div>
+    </div>
+    @if (items.length > 1 && (items.length-1)!=$index) {
+      <div class="col box-line"><div class="line">-</div></div>
+    }
+  }
+</div>

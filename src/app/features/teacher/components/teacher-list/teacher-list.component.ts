@@ -6,6 +6,9 @@ import { TeacherFormComponent } from '../teacher-form/teacher-form.component';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroUsers } from '@ng-icons/heroicons/outline';
 import { iconsList } from '../../../../shared/icons/icons';
+import { DbService } from '../../../../core/services/db.service';
+import { InstitutionTeacher } from '../../../interface/InstitutionTeacher';
+import { CacheService } from '../../../../core/services/cache.service';
 
 
 @Component({
@@ -18,7 +21,21 @@ import { iconsList } from '../../../../shared/icons/icons';
 })
 export class TeacherListComponent {
 
+  dataSource: InstitutionTeacher[] = [];
+
   readonly dialog = inject(MatDialog);
+  dbService = inject(DbService);
+  cacheService = inject(CacheService);
+
+  constructor() {
+  }
+
+  ngOnInit(): void {
+    if(this.cacheService.getCodeModularUser()){
+      const data = { modular_code: this.cacheService.getCodeModularUser() }
+      this.getInstitutionTeachersFromIE(data);
+    }
+  }
 
   addTeacher() {
     const dialogRef = this.dialog.open(TeacherFormComponent, {
@@ -29,9 +46,22 @@ export class TeacherListComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
+      if(result){
+        if(this.cacheService.getCodeModularUser()){
+          const data = { modular_code: this.cacheService.getCodeModularUser() }
+          this.getInstitutionTeachersFromIE(data);
+        }
+      }
     });
+  }
+
+  getInstitutionTeachersFromIE({modular_code, id_academic_calendar}:any){
+
+    this.dbService.getInstitutionTeachers({modular_code, id_academic_calendar} as any).subscribe({
+      next:({ data }) => {
+        this.dataSource = data.data;
+      },
+    })
   }
 
 }

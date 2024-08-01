@@ -1,0 +1,21 @@
+<div class="p-4 mat-dialog-container">
+  <div class="flex flex-column">
+    <h5 class="m-0">Formulario colegiado</h5>
+    <p>Complete todos los campos</p>
+  </div>
+  <div align="end">
+    <form [formGroup]="formCollege" method="post">
+
+      <mat-form-field class="w-full mt-1" appearance="fill">
+        <mat-label>Nombre del colegiado</mat-label>
+        <input type="text" matInput formControlName="name_college">
+        @if (name_college.hasError('required') && name_college.touched) {
+          <mat-error class="p-error">El campo es <strong>requerido</strong></mat-error>
+        }
+      </mat-form-field>
+
+      <button mat-button type="button" class="mr-1" (click)="closeDialog()">Cancelar</button>
+      <button mat-flat-button type="button" (click)="save()">Registrar</button>
+    </form>
+  </div>
+</div>

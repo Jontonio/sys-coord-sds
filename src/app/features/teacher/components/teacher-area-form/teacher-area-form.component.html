@@ -1,0 +1,72 @@
+<div class="p-4 mat-dialog-container">
+  <div class="flex flex-column">
+    <h5 class="m-0">Asignación área docente</h5>
+    <p>Complete todos los campos</p>
+  </div>
+  <div align="end">
+    <form [formGroup]="formTeacherArea" method="post">
+
+      <mat-form-field class="w-full mt-1" appearance="outline" *showForRoles="['ROOT_USER','UGEL_USER']">
+        <mat-label>Institución docente</mat-label>
+        <input matInput type="number" formControlName="id_ie_teacher">
+        @if (id_ie_teacher.hasError('pattern') && !id_ie_teacher.hasError('required')) {
+          <mat-error class="p-error">El campo institución docente no es <strong>válido</strong></mat-error>
+        }
+        @else if (id_ie_teacher.hasError('required') && id_ie_teacher.touched) {
+          <mat-error class="p-error">El campo es <strong>requerido</strong></mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="w-full mt-1" appearance="outline">
+        <mat-label>Área</mat-label>
+        <mat-select formControlName="id_area">
+          @for (item of areas; track $index) {
+            <mat-option [value]="item.id_area">{{item.area_name}}</mat-option>
+          }
+        </mat-select>
+        @if (id_area.hasError('pattern') && !id_area.hasError('required')) {
+          <mat-error class="p-error">El campo área no es <strong>válido</strong></mat-error>
+        }
+        @else if (id_area.hasError('required') && id_area.touched) {
+          <mat-error class="p-error">El campo es <strong>requerido</strong></mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="w-full mt-1" appearance="outline">
+        <mat-label>Grado</mat-label>
+        <mat-select formControlName="id_grade">
+          @for (item of grades; track $index) {
+            <mat-option [value]="item.id_grade">{{item.grade_name}}</mat-option>
+          }
+        </mat-select>
+        @if (id_grade.hasError('pattern') && !id_grade.hasError('required')) {
+          <mat-error class="p-error">El campo grado no es <strong>válido</strong></mat-error>
+        }
+        @else if (id_grade.hasError('required') && id_grade.touched) {
+          <mat-error class="p-error">El campo es <strong>requerido</strong></mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="w-full mt-1" appearance="outline">
+        <mat-label>Sección</mat-label>
+        <mat-select formControlName="id_section">
+          @for (item of sections; track $index) {
+            <mat-option [value]="item.id_section">{{item.section_name}}</mat-option>
+          }
+        </mat-select>
+        @if (id_section.hasError('pattern') && !id_section.hasError('required')) {
+          <mat-error class="p-error">El campo sección no es <strong>válido</strong></mat-error>
+        }
+        @else if (id_section.hasError('required') && id_section.touched) {
+          <mat-error class="p-error">El campo es <strong>requerido</strong></mat-error>
+        }
+      </mat-form-field>
+
+      <button mat-button type="button" class="mr-1" (click)="closeDialog()">Cancelar</button>
+      <button mat-flat-button
+              type="button"
+              (click)="save()"
+              [disabled]="!cacheService.getCodeModularUser() || !cacheService.getAcademicCalendar()">Registrar</button>
+    </form>
+  </div>
+</div>

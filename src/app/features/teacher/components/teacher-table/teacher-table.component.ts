@@ -1,48 +1,36 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { MaterialModule } from '../../../../material/custom-material.module';
-import { Dialog } from '@angular/cdk/dialog';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { heroUsers } from '@ng-icons/heroicons/outline';
 import { iconsList } from '../../../../shared/icons/icons';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { InstitutionTeacher } from '../../../interface/InstitutionTeacher';
+import { SkeletonComponent } from '../../../../shared/components/skeleton/skeleton.component';
+import { ShowEmptyMessageComponent } from '../../../../shared/components/show-empty-message/show-empty-message.component';
+import { LoaddingService } from '../../../../core/services/loadding.service';
+import { TeacherAreaFormComponent } from '../teacher-area-form/teacher-area-form.component';
+import { NotificationService } from '../../../../core/services/notification.service';
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-  document: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', document:'518598555', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', document:'518598555', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', document:'518598555', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', document:'518598555', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', document:'518598555', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', document:'518598555', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', document:'518598555', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', document:'518598555', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', document:'518598555', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', document:'518598555', weight: 20.1797, symbol: 'Ne'},
-];
-
+const ELEMENT_DATA: InstitutionTeacher[] = [];
 
 @Component({
   selector: 'app-teacher-table',
   standalone: true,
-  imports: [MaterialModule, NgIconComponent],
+  imports: [MaterialModule, NgIconComponent, SkeletonComponent, ShowEmptyMessageComponent],
   providers: [provideIcons({ ...iconsList, heroUsers })],
   templateUrl: './teacher-table.component.html',
   styleUrl: './teacher-table.component.css'
 })
 export class TeacherTableComponent {
 
-  displayedColumns: string[] = ['position', 'document', 'name', 'weight', 'symbol', 'action'];
-  dataSource = ELEMENT_DATA;
+  displayedColumns: string[] = ['id', 'id_card', 'names', 'contact', 'action'];
+
+  @Input() dataSource = ELEMENT_DATA;
 
   dialog = inject(MatDialog);
+  loadingService = inject(LoaddingService);
+  notificationService = inject(NotificationService);
 
   deleteTeacher() {
 
@@ -56,6 +44,21 @@ export class TeacherTableComponent {
     modalRef.afterClosed().subscribe( res => {
       console.log(res)
     })
+  }
+
+  assignAreaWork(id_ie_teacher:number){
+
+    const modalRef = this.dialog.open(TeacherAreaFormComponent, {
+      data: { id_ie_teacher },
+      disableClose: true,
+      autoFocus: false,
+      panelClass:'dialog-class',
+    })
+
+    modalRef.afterClosed().subscribe( res => {
+      console.log(res)
+    })
 
   }
+
 }

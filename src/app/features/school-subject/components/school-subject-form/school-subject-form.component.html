@@ -1,0 +1,27 @@
+<div class="p-4 mat-dialog-container">
+  <div class="flex flex-column">
+    <h5 class="m-0">Formulario asignatura</h5>
+    <p>Complete todos los campos</p>
+  </div>
+  <form [formGroup]="formSchoolSubject" class="example-form">
+
+    <mat-form-field class="w-full mt-1" appearance="outline">
+      <mat-label>Nombre de la asignatura</mat-label>
+      <input type="text" matInput formControlName="area_name" [errorStateMatcher]="matcher">
+      @if (area_name.hasError('pattern') && !area_name.hasError('required')) {
+        <mat-error>Digite un nombre válido del área</mat-error>
+      }
+      @else if (area_name.hasError('required')) {
+        <mat-error>Este campo es <strong>requerido</strong></mat-error>
+      }
+      @else if (area_name.hasError('maxlength') && area_name.touched) {
+        <mat-error class="p-error">El nombre debe tener como máximo <strong>200 caracteres</strong></mat-error>
+      }
+    </mat-form-field>
+
+    <div align="end">
+      <button mat-button type="button" class="mr-1" (click)="closeDialog()">Cancelar</button>
+      <button mat-flat-button type="button" (click)="save()">Registrar</button>
+    </div>
+  </form>
+</div>

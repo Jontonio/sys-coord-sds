@@ -4,39 +4,44 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogRef } from '@angular/cdk/dialog';
 import { SectionsFormComponent } from '../sections-form/sections-form.component';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog.component';
+import { DbService } from '../../../../core/services/db.service';
+import { Section } from '../../../interface/Section';
+import { LoaddingService } from '../../../../core/services/loadding.service';
+import { SkeletonComponent } from '../../../../shared/components/skeleton/skeleton.component';
+import { ShowEmptyMessageComponent } from '../../../../shared/components/show-empty-message/show-empty-message.component';
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-  document: string;
-}
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', document:'518598555', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', document:'518598555', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', document:'518598555', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', document:'518598555', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', document:'518598555', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', document:'518598555', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', document:'518598555', weight: 14.0067, symbol: 'N'},
-];
-
+const ELEMENT_DATA: Section[] = [];
 
 @Component({
   selector: 'app-sections-list',
   standalone: true,
-  imports: [MaterialModule],
+  imports: [MaterialModule, SkeletonComponent, ShowEmptyMessageComponent],
   templateUrl: './sections-list.component.html',
   styleUrl: './sections-list.component.css'
 })
 export class SectionsListComponent {
 
-  displayedColumns: string[] = ['id', 'grade', 'action'];
-  dataSource = ELEMENT_DATA;
-  dialog =  inject(MatDialog);
-  dialogRef =  inject(DialogRef);
+  public displayedColumns: string[] = ['id_section', 'section_name', 'action'];
+  public dataSource = ELEMENT_DATA;
+  public dialog =  inject(MatDialog);
+  public dialogRef =  inject(DialogRef);
+  public dbService =  inject(DbService);
+  public loadingService = inject(LoaddingService);
+
+  constructor() {
+    this.getSections();
+  }
+
+  getSections() {
+    this.loadingService.setLoadding(true);
+    this.dbService.getSections().subscribe({
+      next:({ data }) => {
+        this.loadingService.setLoadding(false);
+        this.dataSource = data.data;
+      },
+    })
+  }
 
   closeDialog(){
     this.dialogRef.close(false);

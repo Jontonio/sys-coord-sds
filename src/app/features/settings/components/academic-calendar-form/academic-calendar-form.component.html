@@ -1,0 +1,21 @@
+<div class="p-4 mat-dialog-container">
+  <div class="flex flex-column">
+    <h5 class="m-0">Formulario calendario académico</h5>
+    <p>Complete todos los campos</p>
+  </div>
+  <div align="end">
+    <form [formGroup]="formAcademicCalendar" method="post">
+      <mat-form-field class="w-full mt-1" appearance="fill">
+        <mat-label>Año</mat-label>
+        <input type="text" matInput formControlName="academic_calendar_year">
+        @if (academic_calendar_year.hasError('required') && academic_calendar_year.touched) {
+          <mat-error class="p-error">El campo es <strong>requerido</strong></mat-error>
+        }@else if (academic_calendar_year.hasError('pattern') && academic_calendar_year.touched) {
+          <mat-error class="p-error">El campo del calendario académico es <strong>inválido</strong></mat-error>
+        }
+      </mat-form-field>
+      <button mat-button type="button" class="mr-1" (click)="closeDialog()">Cancelar</button>
+      <button mat-flat-button type="button" (click)="save()">Registrar</button>
+    </form>
+  </div>
+</div>

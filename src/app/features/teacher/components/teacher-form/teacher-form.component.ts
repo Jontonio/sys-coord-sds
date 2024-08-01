@@ -1,10 +1,13 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MaterialModule } from '../../../../material/custom-material.module';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FormControl, FormGroup, FormGroupDirective, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DialogRef } from '@angular/cdk/dialog';
-import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent, ConfirmDialogModel } from '../../../../shared/confirm-dialog/confirm-dialog.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog.component';
+import { DbService } from '../../../../core/services/db.service';
+import { NotificationService } from '../../../../core/services/notification.service';
+import { switchMap } from 'rxjs';
+import { CacheService } from '../../../../core/services/cache.service';
 
 interface TypeDocument {
   code: string,
@@ -28,8 +31,11 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class TeacherFormComponent {
 
   formTeacher!:FormGroup;
-  dialogRef = inject(DialogRef);
+  dialogRef = inject(MatDialogRef);
   dialog = inject(MatDialog);
+  dbService = inject(DbService);
+  notificationService = inject(NotificationService);
+  cacheService = inject(CacheService);
 
   matcher = new MyErrorStateMatcher();
 
@@ -56,11 +62,11 @@ export class TeacherFormComponent {
     this.formTeacher = new FormGroup({
       type_id_card: new FormControl(null, [ Validators.required ]),
       id_card: new FormControl(null, [ Validators.required, Validators.maxLength(8), Validators.minLength(8), Validators.pattern(/^[0-9]*$/)]),
-      name: new FormControl(null, [ Validators.required, Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]),
+      names: new FormControl(null, [ Validators.required, Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]),
       first_name: new FormControl(null, [ Validators.required, Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]),
       last_name: new FormControl(null, [ Validators.required, Validators.pattern(/^([a-z ñáéíóú]{2,60})$/i)]),
       email: new FormControl(null, [ Validators.required, Validators.email]),
-      celphone_number: new FormControl(null, [ Validators.required, Validators.pattern(/^([0-9])*$/), Validators.maxLength(9), Validators.minLength(9)]),
+      phone_number: new FormControl(null, [ Validators.required, Validators.pattern(/^([0-9])*$/), Validators.maxLength(9), Validators.minLength(9)]),
     })
   }
 
@@ -89,8 +95,8 @@ export class TeacherFormComponent {
   get id_card(){
     return this.formTeacher.controls['id_card']
   }
-  get name(){
-    return this.formTeacher.controls['name']
+  get names(){
+    return this.formTeacher.controls['names']
   }
   get first_name(){
     return this.formTeacher.controls['first_name']
@@ -101,17 +107,38 @@ export class TeacherFormComponent {
   get email(){
     return this.formTeacher.controls['email']
   }
-  get celphone_number(){
-    return this.formTeacher.controls['celphone_number']
+  get phone_number(){
+    return this.formTeacher.controls['phone_number']
   }
 
   registerTeacher() {
+
     if(this.formTeacher.invalid){
       Object.keys( this.formTeacher.controls )
             .forEach( label => this.formTeacher.controls[ label ].markAsTouched() )
       return;
     }
-    console.log(this.formTeacher.value)
+
+    if(!this.cacheService.getCodeModularUser()){
+      this.notificationService.warning('Registro de docente', 'Es necesario el código modular de la institución');
+      return;
+    }
+
+    this.dbService.addTeacher(this.formTeacher.value)
+    .pipe(
+      switchMap((res) => {
+        const id_card = this.id_card.value;
+        const modular_code = this.cacheService.getCodeModularUser();
+        return this.dbService.addInstitutionTeacher({ id_card, modular_code } as any);
+      })
+    )
+    .subscribe({
+      next:({ message }) => {
+        this.formTeacher.reset();
+        this.dialogRef.close(true);
+        this.notificationService.success('Registro de docente', message);
+      },
+    })
   }
 
 }

@@ -1,15 +1,23 @@
 <div class="p-4 mat-dialog-container">
-  <p>Registrar nueva sección</p>
+  <div class="flex flex-column">
+    <h5 class="m-0">Formulario sección</h5>
+    <p>Complete todos los campos</p>
+  </div>
   <div align="end">
-    <form method="post">
+    <form [formGroup]="formGrades" method="post">
 
       <mat-form-field class="w-full mt-1" appearance="fill">
         <mat-label>Sección</mat-label>
-        <input type="text" matInput>
+        <input type="text" matInput formControlName="section_name">
+        @if (section_name.hasError('required') && section_name.touched) {
+          <mat-error class="p-error">El campo es <strong>requerido</strong></mat-error>
+        }@else if (section_name.hasError('pattern') && section_name.touched) {
+          <mat-error class="p-error">El campo sección debe ser de tipo <strong>letra</strong></mat-error>
+        }
       </mat-form-field>
 
       <button mat-button type="button" class="mr-1" (click)="closeDialog()">Cancelar</button>
-      <button mat-flat-button type="button">Registrar</button>
+      <button mat-flat-button type="button" (click)="save()">Registrar</button>
     </form>
   </div>
 </div>

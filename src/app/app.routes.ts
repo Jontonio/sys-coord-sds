@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { roleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -22,74 +23,107 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'dashboard',
-    loadComponent: () => import('./shared/layout/layout.component'),
+    path: 'main',
+    loadComponent: () => import('./features/main/main.component'),
     children:[
       {
-        path: 'home',
-        loadComponent: () => import('./features/dashboard/pages/dashboard-home/dashboard-home.component')
-      }
-    ]
-  },
-  {
-    path: 'customer',
-    loadComponent: () => import('./shared/layout/layout.component'),
-    children:[
+        path: 'dashboard',
+        loadComponent: () => import('./shared/layout/layout.component'),
+        children:[
+          {
+            path: 'home',
+            loadComponent: () => import('./features/dashboard/pages/dashboard-home/dashboard-home.component')
+          }
+        ],
+        canActivate:[roleGuard],
+        data:{ rolesPermitidos:['ROOT_USER','UGEL_USER','DIRECTOR_USER','COORD_USER','DOCENTE_USER']}
+      },
       {
-        path: 'home',
-        loadComponent: () => import('./features/customer/pages/customer-home/customer-home.component')
-      }
-    ]
-  },
-  {
-    path: 'docente',
-    loadComponent: () => import('./shared/layout/layout.component'),
-    children:[
+        path: 'docente',
+        loadComponent: () => import('./shared/layout/layout.component'),
+        children:[
+          {
+            path: 'home',
+            loadComponent: () => import('./features/teacher/pages/teacher-home/teacher-home.component')
+          }
+        ],
+        canActivate:[roleGuard],
+        data:{ rolesPermitidos:['ROOT_USER','UGEL_USER','DIRECTOR_USER','COORD_USER'] }
+      },
       {
-        path: 'home',
-        loadComponent: () => import('./features/teacher/pages/teacher-home/teacher-home.component')
-      }
-    ]
-  },
-  {
-    path: 'configuracion',
-    loadComponent: () => import('./shared/layout/layout.component'),
-    children:[
+        path: 'institucion',
+        loadComponent: () => import('./shared/layout/layout.component'),
+        children:[
+          {
+            path: 'home',
+            loadComponent: () => import('./features/institution/institution-home/institution-home.component')
+          }
+        ],
+        canActivate:[roleGuard],
+        data:{ rolesPermitidos:['ROOT_USER','UGEL_USER'] }
+      },
       {
-        path: 'home',
-        loadComponent: () => import('./features/settings/pages/home/home.component')
-      }
-    ]
-  },
-  {
-    path: 'asignatura',
-    loadComponent: () => import('./shared/layout/layout.component'),
-    children:[
+        path: 'college',
+        loadComponent: () => import('./shared/layout/layout.component'),
+        children:[
+          {
+            path: 'home',
+            loadComponent: () => import('./features/college/pages/college-home/college-home.component')
+          }
+        ],
+        canActivate:[roleGuard],
+        data:{ rolesPermitidos:['ROOT_USER','UGEL_USER','DIRECTOR_USER'] }
+      },
       {
-        path: 'home',
-        loadComponent: () => import('./features/school-subject/pages/home/home.component')
-      }
-    ]
-  },
-  {
-    path: 'unidades-de-clase',
-    loadComponent: () => import('./shared/layout/layout.component'),
-    children:[
+        path: 'configuracion',
+        loadComponent: () => import('./shared/layout/layout.component'),
+        children:[
+          {
+            path: 'home',
+            loadComponent: () => import('./features/settings/pages/home/home.component')
+          }
+        ],
+        canActivate:[roleGuard],
+        data:{ rolesPermitidos:['ROOT_USER','UGEL_USER','DIRECTOR_USER'] }
+      },
       {
-        path: 'home',
-        loadComponent: () => import('./features/class-unit/pages/class-unit-home/class-unit-home.component')
-      }
-    ]
-  },
-  {
-    path: 'programacion-academica',
-    loadComponent: () => import('./shared/layout/layout.component'),
-    children:[
+        path: 'asignatura',
+        loadComponent: () => import('./shared/layout/layout.component'),
+        children:[
+          {
+            path: 'home',
+            loadComponent: () => import('./features/school-subject/pages/home/home.component')
+          }
+        ],
+        canActivate:[roleGuard],
+        data:{ rolesPermitidos:['ROOT_USER','UGEL_USER','DIRECTOR_USER'] }
+      },
       {
-        path: 'home',
-        loadComponent: () => import('./features/program-academic/pages/program-academic-home/program-academic-home.component')
+        path: 'unidades-de-clase',
+        loadComponent: () => import('./shared/layout/layout.component'),
+        children:[
+          {
+            path: 'home',
+            loadComponent: () => import('./features/class-unit/pages/class-unit-home/class-unit-home.component')
+          }
+        ],
+        canActivate:[roleGuard],
+        data:{ rolesPermitidos:['ROOT_USER','UGEL_USER','DIRECTOR_USER','COORD_USER','DOCENTE_USER'] }
+      },
+      {
+        path: 'programacion-academica',
+        loadComponent: () => import('./shared/layout/layout.component'),
+        children:[
+          {
+            path: 'home',
+            loadComponent: () => import('./features/program-academic/pages/program-academic-home/program-academic-home.component')
+          }
+        ],
+        canActivate:[roleGuard],
+        data:{ rolesPermitidos:['DOCENTE_USER'] }
       }
-    ]
+    ],
+    canActivate:[authGuard]
   },
   {
     path: '**',
