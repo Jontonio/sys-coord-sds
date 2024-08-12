@@ -1,0 +1,89 @@
+<mat-card class="p-3">
+  <p>Fechas de programación académica</p>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z0">
+    <!-- Name Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> N° </th>
+      <td mat-cell *matCellDef="let element; let i=index"> {{i+1+startPage}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="academic_program_bim">
+      <th mat-header-cell *matHeaderCellDef> Bimestre </th>
+      <td mat-cell *matCellDef="let element"> {{element.academic_program_bim}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="academic_program_start">
+      <th mat-header-cell *matHeaderCellDef> Fecha inicio </th>
+      <td mat-cell *matCellDef="let element"> {{element.academic_program_start }} </td>
+    </ng-container>
+
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="academic_program_finish">
+      <th mat-header-cell *matHeaderCellDef> Fecha final </th>
+      <td mat-cell *matCellDef="let element"> {{element.academic_program_finish}} </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="unit">
+      <th mat-header-cell *matHeaderCellDef> Unidades </th>
+      <td mat-cell *matCellDef="let element">
+        <app-unit-list-card [units]="element.unit"
+                            (handleUpdate)="updateUnit($event)"
+                            (handleDelete)="deleteUnit($event)" />
+      </td>
+    </ng-container>
+
+    <!-- action Column -->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell class="mat-header-cell" *matHeaderCellDef> Acción </th>
+      <td mat-cell class="mat-cell" *matCellDef="let element">
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="addUnit(element)">
+            <mat-icon>
+              <ng-icon name="featherPlus" class="btn-icon"></ng-icon>
+            </mat-icon>
+            <span>Agregar nueva unidad</span>
+          </button>
+          <button mat-menu-item disabled="true">
+            <mat-icon>
+              <ng-icon name="featherTrash" class="btn-icon"></ng-icon>
+            </mat-icon>
+            <span>Eliminar bimistre</span>
+          </button>
+          <button mat-menu-item (click)="editAcademicProgram(element)">
+            <mat-icon>
+              <ng-icon name="featherEdit2" class="btn-icon"></ng-icon>
+            </mat-icon>
+            <span>Editar bimestre</span>
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  @if (loadingService.getLoadding() && dataSource.length==0) {
+    @for (item of [1,2,3,4,5,6,7,8,9]; track $index) {
+      <app-skeleton/>
+    }
+  }
+
+  @if (!loadingService.getLoadding() && dataSource.length==0) {
+    <app-show-empty-message/>
+  }
+
+  <mat-paginator  [length]="length"
+                  [pageSize]="pageSize"
+                  [pageIndex]="pageIndex - 1"
+                  (page)="pageEvent($event)"
+                  aria-label="Select page"></mat-paginator>
+
+</mat-card>

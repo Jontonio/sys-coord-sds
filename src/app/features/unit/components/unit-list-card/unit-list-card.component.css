@@ -1,0 +1,29 @@
+.container-units{
+  border-left: 2px solid #57575797;
+  display: flex;
+  align-items: center;
+}
+.line-horizontal{
+  background: #57575797;
+  height: 2px;
+  width: 20px;
+}
+.container-dates{
+  display: flex;
+  margin: 2px;
+  background: #5757572e;
+  border-radius: 5px;
+  min-width: 230px;
+}
+.icon-unit-list{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 20px;
+  height: 25px;
+  width: 25px;
+}
+.icon-unit-list:hover{
+  background: #5757572e;
+}

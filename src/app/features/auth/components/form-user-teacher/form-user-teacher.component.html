@@ -1,0 +1,67 @@
+<div class="p-4 mat-dialog-container">
+  <div class="flex flex-column">
+    <h5 class="m-0">Nuevo docente usuario</h5>
+    <p>Complete todos los campos</p>
+  </div>
+  <form [formGroup]="formUserTeacher" class="example-form">
+
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>DNI</mat-label>
+      <input matInput formControlName="id_card_user" maxlength="8" minlength="8">
+      @if (id_card_user.hasError('pattern') && !id_card_user.hasError('required')) {
+        <mat-error class="p-error">Digite un documento <strong>válido</strong></mat-error>
+      }
+      @if (id_card_user.hasError('required') && id_card_user.touched) {
+        <mat-error class="p-error">El campo <strong>requerido</strong></mat-error>
+      }
+      @if (id_card_user.hasError('minlength')) {
+        <mat-error class="p-error">El debe tener mínimo 8 <strong>caracteres</strong></mat-error>
+      }
+      @if (id_card_user.hasError('maxlength')) {
+        <mat-error class="p-error">El debe tener máximo 8 <strong>caracteres</strong></mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="w-full mt-1" appearance="outline">
+      <mat-label>Nombres</mat-label>
+      <input type="text" matInput formControlName="name">
+      @if (name.hasError('pattern') && !email.hasError('required')) {
+        <mat-error>Digite un nombre válido</mat-error>
+      }
+      @if (name.hasError('required')) {
+        <mat-error>Este campo es <strong>requerido</strong></mat-error>
+      }
+      @if (name.hasError('pattern') && !name.hasError('required')) {
+        <mat-error class="p-error">Digite un nombre <strong>válido</strong></mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="w-full mt-1" appearance="outline">
+    <mat-label>Apellidos</mat-label>
+    <input matInput formControlName="surname_user">
+    @if (surname_user.hasError('pattern') && !surname_user.hasError('required')) {
+      <mat-error>Digite un apellido válido</mat-error>
+    }
+    @if (surname_user.hasError('required')) {
+      <mat-error>Este campo es <strong>requerido</strong></mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field class="w-full mt-1" appearance="outline">
+    <mat-label>Email</mat-label>
+    <input type="email" matInput formControlName="email" [errorStateMatcher]="matcher">
+    @if (email.hasError('email') && !email.hasError('required')) {
+      <mat-error>Digite un email válido</mat-error>
+    }
+    @if (email.hasError('required')) {
+      <mat-error>Este campo es <strong>requerido</strong></mat-error>
+    }
+  </mat-form-field>
+
+
+    <div align="end">
+      <button mat-button type="button" class="mr-1" mat-dialog-close="true">Cancelar</button>
+      <button mat-flat-button type="button" (click)="save()">Registrar</button>
+    </div>
+  </form>
+</div>

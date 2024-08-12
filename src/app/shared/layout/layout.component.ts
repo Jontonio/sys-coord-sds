@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy, AfterViewInit, inject } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
-import { SpinnerService } from '../../core/services/spinner.service';
 import { MaterialModule } from '../../material/custom-material.module';
 import { RouterModule } from '@angular/router';
 import { MainRoute } from '../interface/main-routes';
@@ -13,6 +12,8 @@ import { iconsList } from '../icons/icons';
 import { LoaddingService } from '../../core/services/loadding.service';
 import { CacheService } from '../../core/services/cache.service';
 import { SkeletonComponent } from '../components/skeleton/skeleton.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
     selector: 'app-layout',
@@ -34,6 +35,7 @@ export default class LayoutComponent implements OnDestroy, AfterViewInit {
 
   mobileQuery: MediaQueryList;
   showSpinner: boolean = false;
+  dialog = inject(MatDialog);
 
   listRoutes:MainRoute[] = [
     {
@@ -52,7 +54,7 @@ export default class LayoutComponent implements OnDestroy, AfterViewInit {
       nameRoute: "Programación académica",
       route: "../programacion-academica/home",
       icon: "featherCalendar",
-      permitRoles:['DOCENTE_USER']
+      permitRoles:['DOCENTE_USER','DIRECTOR_USER']
     },
     {
       nameRoute: "Docentes",
@@ -70,7 +72,7 @@ export default class LayoutComponent implements OnDestroy, AfterViewInit {
       nameRoute: "Asignaturas",
       route: "../asignatura/home",
       icon: "featherBook",
-      permitRoles:['ROOT_USER','UGEL_USER','DIRECTOR_USER']
+      permitRoles:['ROOT_USER','UGEL_USER']
     },
     {
       nameRoute: "Unidades",
@@ -107,7 +109,20 @@ export default class LayoutComponent implements OnDestroy, AfterViewInit {
     }
 
     logout() {
-      this._authService.logout();
-      this._authService.redirecToLogin();
+
+      const configModal = this.dialog.open(ConfirmDialogComponent, {
+        data:{
+          title: "Cerrar sesión",
+          message: "¿Está seguro de cerrar la sesión en el sistema?"
+        }
+      })
+
+      configModal.afterClosed().subscribe( res => {
+        if(res){
+          this._authService.redirecToLogin();
+          this._authService.logout();
+        }
+      })
+
     }
 }

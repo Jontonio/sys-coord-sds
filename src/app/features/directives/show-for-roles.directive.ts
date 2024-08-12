@@ -1,5 +1,5 @@
 import { Directive, inject, Input, TemplateRef, ViewContainerRef } from '@angular/core';
-import { distinctUntilChanged, of, Subscription, tap } from 'rxjs';
+import { distinctUntilChanged, map, of, Subscription, tap } from 'rxjs';
 import { AuthenticationService } from '../../core/services/auth.service';
 
 @Directive({
@@ -8,34 +8,33 @@ import { AuthenticationService } from '../../core/services/auth.service';
 })
 export class ShowForRolesDirective {
 
-  @Input('showForRoles') rolesPermitidos?:string[];
+  @Input('showForRoles') rolesPermitidos?: string[];
 
-  sub$:Subscription = new Subscription();
+  sub$: Subscription = new Subscription();
   authService = inject(AuthenticationService);
 
-  constructor(private viewContainerRedf:ViewContainerRef, private templateRef:TemplateRef<any>) { }
+  constructor(private viewContainerRef: ViewContainerRef, private templateRef: TemplateRef<any>) { }
 
   ngOnInit(): void {
 
     const userAuth = this.authService.getUserAuth;
 
-    userAuth.roles.forEach( val => {
-
-      const hasRole: boolean = Boolean(this.rolesPermitidos?.includes(val.name.toUpperCase()));
-
-      this.sub$ = of(hasRole)
+    const hasRole$ = of(userAuth.roles)
       .pipe(
-        distinctUntilChanged(),
-        tap((hasRole) => hasRole
-          ? this.viewContainerRedf.createEmbeddedView(this.templateRef)
-          : this.viewContainerRedf.clear())
+        map(roles => roles.some(role => this.rolesPermitidos?.includes(role.name.toUpperCase()))),
+        distinctUntilChanged()
+      );
+
+    this.sub$ = hasRole$
+      .pipe(
+        tap(hasRole => hasRole
+          ? this.viewContainerRef.createEmbeddedView(this.templateRef)
+          : this.viewContainerRef.clear())
       )
       .subscribe();
-
-    })
   }
 
   ngOnDestroy(): void {
-    if(this.sub$) this.sub$.unsubscribe();
+    if (this.sub$) this.sub$.unsubscribe();
   }
 }

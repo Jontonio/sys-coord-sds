@@ -19,6 +19,13 @@ export class TeacherAreaListAssignComponent {
 
   dataSource: InstitutionTeacher[] = [];
 
+  length:number = 0;
+
+  constructor() {
+    // initializate cache
+    this.dataSource = this.cacheService.cachePageArea.areas;
+  }
+
   ngOnInit(): void {
     if(this.cacheService.getCodeModularUser()){
       const data = { modular_code: this.cacheService.getCodeModularUser() }
@@ -26,12 +33,20 @@ export class TeacherAreaListAssignComponent {
     }
   }
 
-  getTeacherAreasFromIE({modular_code}:any){
+  pageIndexEvent(pageIndex: number){
+    if(this.cacheService.getCodeModularUser()){
+      const data = { modular_code: this.cacheService.getCodeModularUser(), pageIndex }
+      this.getTeacherAreasFromIE(data);
+    }
+  }
 
-    this.dbService.getTeacherAreasFromIE({modular_code} as any).subscribe({
+
+  getTeacherAreasFromIE({modular_code, pageIndex}:any){
+
+    this.dbService.getTeacherAreasFromIE({modular_code, pageIndex} as any).subscribe({
       next:({ data }) => {
-        console.log(data)
         this.dataSource = data.data;
+        this.length = data.total;
       },
     })
   }

@@ -23,12 +23,20 @@ mat-card, mat-paginator, .mat-table, .mat-expansion-panel{
 .hidden-dialog {
   visibility: hidden !important;
 }
-
+.img-logo-siraun{
+  width: 270px;
+  margin: 0 auto;
+}
 .display-dialog {
   visibility: visible !important;
 }
 .card-actions{
   margin-top: auto;
+}
+
+.label-unit-name{
+  color: #00897B;
+  font-weight: 450;
 }
 
 /* Styles for setting  */
@@ -38,7 +46,25 @@ mat-card, mat-paginator, .mat-table, .mat-expansion-panel{
   flex-wrap: wrap;
   gap: 15px;
 }
-
+.container-title-ie{
+  height: 50px;
+  padding: 10px;
+  background: #ECE9E6;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #FFFFFF, #ECE9E6);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #FFFFFF, #ECE9E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  text-wrap: wrap;
+  display: flex;
+  font-weight: 400;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.container-title-ie span{
+  font-size: 13px;
+}
+.title-ie{
+  font-size: 18px;
+}
 .card-setting {
   flex: 1 1 calc(33.33% - 20px);
   min-width: 250px;

@@ -6,8 +6,9 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog.component';
 import { DbService } from '../../../../core/services/db.service';
 import { NotificationService } from '../../../../core/services/notification.service';
-import { switchMap } from 'rxjs';
+import { of, switchMap } from 'rxjs';
 import { CacheService } from '../../../../core/services/cache.service';
+import { LoaddingService } from '../../../../core/services/loadding.service';
 
 interface TypeDocument {
   code: string,
@@ -36,6 +37,7 @@ export class TeacherFormComponent {
   dbService = inject(DbService);
   notificationService = inject(NotificationService);
   cacheService = inject(CacheService);
+  loadingService = inject(LoaddingService);
 
   matcher = new MyErrorStateMatcher();
 
@@ -109,6 +111,30 @@ export class TeacherFormComponent {
   }
   get phone_number(){
     return this.formTeacher.controls['phone_number']
+  }
+
+  validateTeacher(){
+    if(this.id_card.invalid) return;
+
+    this.dbService.getTeacherByDocument(this.id_card.value)
+    .pipe(
+      switchMap(response => {
+        return (response && response.data)?of(response):this.dbService.getRENIEC(this.id_card.value);
+    }))
+    .subscribe({
+      next:({ data }) => {
+        this.resetFormExceptOne('type_id_card');
+        this.formTeacher.patchValue(data)
+      },
+    })
+  }
+
+  resetFormExceptOne(fieldToKeep: string) {
+    const valueToKeep = this.formTeacher.get(fieldToKeep)?.value;
+    this.formTeacher.reset();
+    if (valueToKeep !== undefined) {
+      this.formTeacher.get(fieldToKeep)?.setValue(valueToKeep);
+    }
   }
 
   registerTeacher() {

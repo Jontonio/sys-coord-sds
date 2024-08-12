@@ -1,0 +1,37 @@
+<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+  <!-- This is the tree node template for leaf nodes -->
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+    <!-- use a disabled button to provide padding for tree leaf -->
+    <div>
+      @if (node.value.data) {
+        <app-class-unit-tree [_unit]="node.value.data"/>
+      }
+    </div>
+  </mat-tree-node>
+  <!-- This is the tree node template for expandable nodes -->
+  <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
+    <button mat-icon-button matTreeNodeToggle
+            [attr.aria-label]="'Toggle ' + node.name">
+      <mat-icon class="mat-icon-rtl-mirror">
+        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+      </mat-icon>
+    </button>
+    <div class="flex justify-content-center align-items-center">
+      <div class="mt-3">
+        <p class="label-unit-name">{{node.value.label}}</p>
+      </div>
+    </div>
+  </mat-tree-node>
+</mat-tree>
+
+@if (this.dataSource.data.length==0 && !_loadding.getLoadding()) {
+  <div class="p-2">
+    <app-show-empty-message msg="No se registraron unidades"/>
+  </div>
+}@else if(_loadding.getLoadding() && this.dataSource.data.length==0){
+  <div>
+     @for (item of [1,2,3]; track $index) {
+      <app-skeleton></app-skeleton>
+     }
+  </div>
+}

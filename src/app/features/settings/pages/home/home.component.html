@@ -1,23 +1,23 @@
 <div class="container-setting">
 
-  <mat-card class="card-setting" appearance="raised">
+
+  <mat-card class="card-setting" appearance="raised" *showForRoles="['ROOT_USER','UGEL_USER']">
     <mat-card-header>
       <mat-card-title-group>
-        <mat-card-title>Programación académica</mat-card-title>
+        <mat-card-title>Calendario académico</mat-card-title>
         <mat-card-subtitle>Administrar</mat-card-subtitle>
-        <!-- <img mat-card-sm-image src="./assets/img/img-academic.svg" > -->
       </mat-card-title-group>
     </mat-card-header>
     <mat-card-content>
-      Registra y edita programaciones académicas de tu institución.
+      Realiza el registro y actualización del calendario académico para las instituciones. El año del calendario académico es importante.
     </mat-card-content>
     <mat-card-actions align="end" class="card-actions">
-      <button mat-stroked-button class="ml-2" (click)="addProgram()">
+      <button mat-stroked-button class="ml-2" (click)="addAcademicCalendar()">
         <mat-icon>add</mat-icon>
         Agregar
       </button>
-      <button mat-stroked-button class="ml-2" (click)="showListProgram()">
-        <mat-icon class="btn-icon">
+      <button mat-stroked-button class="ml-2" (click)="showListAcademicCalendar()">
+        <mat-icon>
           <ng-icon name="featherList" size="20"></ng-icon>
         </mat-icon>
         Registrados
@@ -55,7 +55,6 @@
       <mat-card-title-group>
         <mat-card-title>Secciones</mat-card-title>
         <mat-card-subtitle>Administrar</mat-card-subtitle>
-        <!-- <img mat-card-sm-image src="./assets/img/img-section.svg" > -->
       </mat-card-title-group>
     </mat-card-header>
     <mat-card-content>
@@ -67,31 +66,6 @@
         Agregar
       </button>
       <button mat-stroked-button class="ml-2" (click)="showListSections()">
-        <mat-icon>
-          <ng-icon name="featherList" size="20"></ng-icon>
-        </mat-icon>
-        Registrados
-      </button>
-    </mat-card-actions>
-  </mat-card>
-
-  <mat-card class="card-setting" appearance="raised" *showForRoles="['ROOT_USER','UGEL_USER']">
-    <mat-card-header>
-      <mat-card-title-group>
-        <mat-card-title>Calendario académico</mat-card-title>
-        <mat-card-subtitle>Administrar</mat-card-subtitle>
-        <!-- <img mat-card-sm-image src="./assets/img/img-section.svg" > -->
-      </mat-card-title-group>
-    </mat-card-header>
-    <mat-card-content>
-      Realiza el registro y actualización del calendario académico para las instituciones. El año del calendario académico es importante.
-    </mat-card-content>
-    <mat-card-actions align="end" class="card-actions">
-      <button mat-stroked-button class="ml-2" (click)="addAcademicCalendar()">
-        <mat-icon>add</mat-icon>
-        Agregar
-      </button>
-      <button mat-stroked-button class="ml-2" (click)="showListAcademicCalendar()">
         <mat-icon>
           <ng-icon name="featherList" size="20"></ng-icon>
         </mat-icon>

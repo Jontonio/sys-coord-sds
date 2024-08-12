@@ -1,6 +1,6 @@
 <div class="p-4 mat-dialog-container">
   <div class="flex flex-column">
-    <h5 class="m-0">Programación académica</h5>
+    <h5 class="m-0">{{update?'Editar programación académica':'Programación académica'}}</h5>
     <p>Complete todos los campos</p>
   </div>
   <div align="end">
@@ -35,7 +35,7 @@
         <mat-label>Periodo</mat-label>
         <mat-select formControlName="academic_program_bim">
           @for (item of ['I','II','III','IV','V','VI','VII','VIII','IX','X']; track $index) {
-            <mat-option [value]="item">{{item}}</mat-option>
+            <mat-option [value]="item">Bimestre {{item}}</mat-option>
           }
         </mat-select>
         @if (academic_program_bim.hasError('pattern') && !academic_program_bim.hasError('required')) {
@@ -85,7 +85,13 @@
       <button mat-flat-button
               type="button"
               (click)="save()"
-              [disabled]="!cacheService.getCodeModularUser() || !cacheService.getAcademicCalendar()">Registrar</button>
+              [disabled]="!cacheService.getCodeModularUser() || !cacheService.getAcademicCalendar() || _loading.getLoadding()">
+              @if(_loading.getLoadding()){
+                <loading-save/>
+              }@else {
+                Guardar
+              }
+            </button>
     </form>
   </div>
 </div>

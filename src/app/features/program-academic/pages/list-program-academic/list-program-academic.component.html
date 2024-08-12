@@ -1,0 +1,22 @@
+
+<!-- table -->
+<div class="mt-3">
+  <div class="flex justify-content-between flex-wrap">
+    <div class="col">
+      <h4 class="m-0">Programación académica</h4>
+      <p>La tabla de programación registrada</p>
+    </div>
+    <div class="col flex align-items-center justify-content-end">
+      <button class="flex justify-content-center align-items-center"
+              mat-mini-fab
+              [disabled]="!cacheService.getAcademicCalendar()"
+              (click)="addProgramAcademic()">
+        <mat-icon>
+          <ng-icon name="featherPlus" size="25"></ng-icon>
+        </mat-icon>
+      </button>
+    </div>
+  </div>
+  <app-program-academic-table [dataSource]="dataSource" [length]="length" (pageIndexEvent)="pageIndexEvent($event)"/>
+</div>
+

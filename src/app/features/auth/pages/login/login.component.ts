@@ -18,14 +18,6 @@ import { ToastrService } from 'ngx-toastr';
 
 export default class LoginComponent {
 
-    users: string[] = [
-      'USER_ROOT@gmail.com',
-      'UGEL_USER@gmail.com',
-      'DIRECTOR_USER@gmail.com',
-      'COORD_USER@gmail.com',
-      'DOCENTE@gmail.com',
-    ]
-
     private toastr = inject(ToastrService);
 
     loginForm!: UntypedFormGroup;

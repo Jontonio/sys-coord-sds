@@ -14,6 +14,6 @@ export default class DashboardHomeComponent {
   titleService = inject(Title);
 
   constructor() {
-    this.titleService.setTitle('Dashboard');
+    this.titleService.setTitle('SIRAUN | Dashboard');
   }
 }

@@ -1,17 +1,33 @@
 <div class="container-timeline scroll-content">
-  @for (item of items; track $index) {
+  @for (item of programamAcademics; track $index) {
     <div class="flex-column col">
       <div class="col time">
-          <div class="m-1">11/12/2024</div>
+          <div class="m-1">{{item.academic_program_start}}</div>
           <div class="m-1">a</div>
-          <div class="m-1">11/12/2024</div>
+          <div class="m-1">{{item.academic_program_finish}}</div>
       </div>
       <div class="col sub-time">
-        Periodo {{($index + 1) | toRoman}}
+        Periodo {{item.academic_program_bim}}
       </div>
     </div>
-    @if (items.length > 1 && (items.length-1)!=$index) {
+    @if (programamAcademics.length > 1 && (programamAcademics.length-1)!=$index) {
       <div class="col box-line"><div class="line">-</div></div>
     }
   }
+
+
+  @if (loadingService.getLoadding() && programamAcademics.length==0) {
+    <mat-card class="w-full p-3">
+      @for (item of [1,2,3,4,5,6,7,8,9]; track $index) {
+        <app-skeleton />
+      }
+    </mat-card>
+  }
+
+  @if (!loadingService.getLoadding() && programamAcademics.length==0) {
+    <mat-card class="w-full mb-2">
+      <app-show-empty-message/>
+    </mat-card>
+  }
+
 </div>

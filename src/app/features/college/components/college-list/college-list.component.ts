@@ -62,8 +62,6 @@ export class CollegeListComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
       if(currentDialogRef){
         currentDialogRef.removePanelClass('hidden-dialog');
       }

@@ -18,7 +18,6 @@ export const authGuard: CanActivateFn = (route, state) => {
   return new Promise((resolve, reject) => {
     authService.checkAuthUser().subscribe({
       next:({ data }) => {
-        console.log(data)
         authService.setUserAuth(data);
         spinnerService.hide();
         resolve(true);

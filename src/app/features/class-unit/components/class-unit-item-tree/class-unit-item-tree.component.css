@@ -1,3 +1,13 @@
 .file-type{
   font-size: 12px;
 }
+.un-verified{
+  color: rgb(246, 6, 6);
+}
+.verified{
+  color: #028454;
+}
+.msg-recive{
+  color: #028454;
+  font-size: 12px;
+}

@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { MaterialModule } from '../../../../material/custom-material.module';
 import { MatDialog } from '@angular/material/dialog';
-import { FormProgramAcademicComponent } from '../../components/form-program-academic/form-program-academic.component';
-import { ListProgramAcademicComponent } from '../../components/list-program-academic/list-program-academic.component';
+import { FormProgramAcademicComponent } from '../../../program-academic/components/form-program-academic/form-program-academic.component';
+import { ListProgramAcademicComponent } from '../../../program-academic/pages/list-program-academic/list-program-academic.component';
 import { GradesFormComponent } from '../../components/grades-form/grades-form.component';
 import { GradesListComponent } from '../../components/grades-list/grades-list.component';
 import { SectionsFormComponent } from '../../components/sections-form/sections-form.component';
@@ -11,10 +11,11 @@ import { heroUsers } from '@ng-icons/heroicons/outline';
 import { iconsList } from '../../../../shared/icons/icons';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { ShowForRolesDirective } from '../../../directives/show-for-roles.directive';
-import { AcademicCalendarFormComponent } from '../../components/academic-calendar-form/academic-calendar-form.component';
-import { AcademicCalendarListComponent } from '../../components/academic-calendar-list/academic-calendar-list.component';
 import { CollegeFormComponent } from '../../../college/components/college-form/college-form.component';
 import { CollegeListComponent } from '../../../college/components/college-list/college-list.component';
+import { Title } from '@angular/platform-browser';
+import { AcademicCalendarListComponent } from '../../components/academic-calendar-list/academic-calendar-list.component';
+import { AcademicCalendarFormComponent } from '../../components/academic-calendar-form/academic-calendar-form.component';
 
 @Component({
   selector: 'app-home',
@@ -28,18 +29,10 @@ export default class HomeComponent {
 
   private dialog = inject(MatDialog);
 
-  addProgram() {
-    const dialogRef = this.dialog.open(FormProgramAcademicComponent, {
-      data: {name: "Messy", animal: "cat"},
-      disableClose: true,
-      autoFocus: false,
-      panelClass:'dialog-class',
-    });
+  titleService = inject(Title);
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
-    });
+  constructor(){
+    this.titleService.setTitle('SIRAUN | Configuración');
   }
 
   addGrades() {
@@ -93,21 +86,6 @@ export default class HomeComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
-    });
-  }
-
-  showListProgram() {
-    const configModal = this.dialog.open(ListProgramAcademicComponent, {
-      data: {name: "Messy", animal: "cat"},
-      disableClose: true,
-      autoFocus: false,
-      panelClass:'dialog-class',
-      id: 'md-list-program-academic'
-    });
-
-    configModal.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       console.log(result);
     });

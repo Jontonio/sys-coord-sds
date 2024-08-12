@@ -6,28 +6,75 @@
         </mat-icon>
         <p class="text-lg ml-1">Registro de unidad</p>
     </div>
-    <div class="flex flex-column text-center">
-      <div
-        id="dropzone"
-        class="dropzone"
-        (dragover)="onDragOver($event)"
-        (dragleave)="onDragLeave($event)"
-        (drop)="onDrop($event)"
-      >
-        <p>Arrastra y suelta tus archivos aquí</p>
-        <div>
-          <input type="file" id="fileInput" class="file-input" multiple (change)="onFileChange($event)">
-          <button mat-stroked-button color="primary" onclick="document.getElementById('fileInput').click()">
-              {{files.length==0?"Seleciona tus archivos":
-              (files.length==1?"Un archivo selecionado":files.length + " archivos selecionados")}}
-          </button>
-      </div>
+    <form [formGroup]="formLoadFile" method="post">
+
+      <div class="flex flex-column text-center">
+        <div
+          id="dropzone"
+          class="dropzone"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+          (drop)="onDrop($event)"
+        >
+          <p>Arrastra y suelta el archivo aquí</p>
+          <div>
+            <input type="file"
+                    id="fileInput"
+                    class="file-input"
+                    formControlName="unit_file"
+                    accept=".pdf"
+                    (change)="onFileChange($event)">
+            <button mat-stroked-button type="button" color="primary" onclick="document.getElementById('fileInput').click()">
+                {{files.length==0?"Seleciona tu archivo":"Un archivo selecionado"}}
+            </button>
+        </div>
+        </div>
+
       </div>
 
-    </div>
-    <div align="end" class="mt-4">
-      <button mat-button type="button" class="mr-1" mat-dialog-close="true">Cancelar</button>
-      <button mat-flat-button type="button">Subir</button>
-    </div>
+      <mat-form-field class="w-full mt-4" appearance="outline">
+        <mat-label>Título de la unidad</mat-label>
+        <input matInput formControlName="class_unit_title" maxlength="150">
+        @if (class_unit_title.hasError('pattern') && !class_unit_title.hasError('required')) {
+          <mat-error class="p-error">El campo titulo del documento no es <strong>válido</strong></mat-error>
+        }
+        @else if (class_unit_title.hasError('required') && class_unit_title.touched) {
+          <mat-error class="p-error">El campo es <strong>requerido</strong></mat-error>
+        }
+        @else if (class_unit_title.hasError('maxlength') && class_unit_title.touched) {
+          <mat-error class="p-error">El campo debe tener como máximo 150 <strong>caracteres</strong></mat-error>
+        }
+      </mat-form-field>
+
+      <section class="mb-2">
+        <mat-checkbox class="example-margin"
+                      formControlName="showMoreFields"
+                      (click)="changeCheckbox()">Agregar descripción a la unidad</mat-checkbox>
+      </section>
+
+      @if (this.showMoreFields.value) {
+        <ng-container>
+
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Descripción del documento</mat-label>
+            <textarea matInput formControlName="class_unit_description" maxlength="350"></textarea>
+            @if (class_unit_description.hasError('pattern') && !class_unit_description.hasError('required')) {
+              <mat-error class="p-error">El campo descripción del documento no es <strong>válido</strong></mat-error>
+            }
+            @else if (class_unit_description.hasError('required') && class_unit_description.touched) {
+              <mat-error class="p-error">El campo es <strong>requerido</strong></mat-error>
+            }
+            @else if (class_unit_description.hasError('maxlength') && class_unit_description.touched) {
+              <mat-error class="p-error">El campo debe tener como máximo 350 <strong>caracteres</strong></mat-error>
+            }
+          </mat-form-field>
+        </ng-container>
+      }
+
+      <div align="end" mat-dialog-actions class="m-0 p-0">
+        <button mat-button type="button" (click)="closeDialog()">Cancelar</button>
+        <button mat-flat-button type="button" (click)="save()">Registrar</button>
+      </div>
+    </form>
 </div>
 

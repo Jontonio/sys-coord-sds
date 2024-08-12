@@ -1,0 +1,26 @@
+<div>
+  @if (units.length==0) {
+    <div>
+      <span>No se registraron unidades al bimestre</span>
+    </div>
+  }
+  @for (unit of units; track $index) {
+    <div class="flex container-units">
+      <div class="line-horizontal"></div>
+      <div class="container-dates">
+        <div class="m-1">{{unit.unit_name}} - </div>
+        <div class="m-1">{{unit.unit_start}}</div>
+        <div class="m-1">a</div>
+        <div class="m-1">{{unit.unit_finish}}</div>
+      </div>
+      <div class="flex">
+        <div class="icon-unit-list" (click)="selectedUpdate(unit)">
+          <ng-icon name="featherEdit2" size="15"></ng-icon>
+        </div>
+        <div class="icon-unit-list" (click)="selectedDelete(unit)">
+          <ng-icon name="featherDelete" size="15"></ng-icon>
+        </div>
+      </div>
+    </div>
+  }
+</div>

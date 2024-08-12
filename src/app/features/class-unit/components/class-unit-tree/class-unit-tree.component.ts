@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input, SimpleChanges } from '@angular/core';
 import { MaterialModule } from '../../../../material/custom-material.module';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
@@ -8,9 +8,17 @@ import { heroUsers } from '@ng-icons/heroicons/outline';
 import { iconsList } from '../../../../shared/icons/icons';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { ShowForRolesDirective } from '../../../directives/show-for-roles.directive';
-import { Dialog } from '@angular/cdk/dialog';
 import { LoadFileComponent } from '../../../../shared/components/load-file/load-file.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DbService } from '../../../../core/services/db.service';
+import { NotificationService } from '../../../../core/services/notification.service';
+import { map } from 'rxjs';
+import { CacheService } from '../../../../core/services/cache.service';
+import { ShowEmptyMessageComponent } from '../../../../shared/components/show-empty-message/show-empty-message.component';
+import { LoaddingService } from '../../../../core/services/loadding.service';
+import { SkeletonComponent } from '../../../../shared/components/skeleton/skeleton.component';
+import { AuthenticationService } from '../../../../core/services/auth.service';
+import { Unit } from '../../../interface/Unit';
 
 
 interface FoodNode {
@@ -18,49 +26,10 @@ interface FoodNode {
   children?: FoodNode[];
 }
 
-const TREE_DATA: FoodNode[] = [
-  {
-    value: { name:"Ciencia y tecnología", id:10 },
-    children: [
-      {
-        value: { name:"Mario Gomez prueba", id:20 },
-        children: [
-          {
-            value: { link: "test1", data: "http://localhost:4200/unidades-de-clase/home"},
-          },
-          {
-            value: { link: "test2", data: "http://localhost:4200/unidades-de-clase/home"},
-          },
-          {
-            value: { link: "test3", data: "http://localhost:4200/unidades-de-clase/home"},
-          }
-        ],
-      },
-      {
-        value: { name:"Luisa Medina prueba", id:50 },
-        children: [{value: 'Pumpkins'}, {value: 'Carrots'}],
-      },
-    ],
-  },
-  {
-    value: { name:"Matematicas", id:60 },
-    children: [
-      {
-        value: { name:'Katerin Gomez Ramires prueba', id:80 },
-        children: [{value: 'Archivo de unidad'}, {value: 'Brussels sprouts'}],
-      },
-      {
-        value: { name:'Mario prueba', id:100 },
-        children: [{value: 'Pumpkins'}, {value: 'Carrots'}],
-      },
-    ],
-  },
-];
-
 /** Flat node with expandable and level information */
 interface ExampleFlatNode {
   expandable: boolean;
-  value: string;
+  value: any;
   level: number;
 }
 
@@ -71,14 +40,14 @@ interface ExampleFlatNode {
             CommonModule,
             ClassUnitItemTreeComponent,
             ShowForRolesDirective,
+            ShowEmptyMessageComponent,
+            SkeletonComponent,
             NgIconComponent],
   providers: [provideIcons({ ...iconsList, heroUsers })],
   templateUrl: './class-unit-tree.component.html',
   styleUrl: './class-unit-tree.component.css'
 })
 export class ClassUnitTreeComponent {
-
-  private dialog = inject(MatDialog)
 
   private _transformer = (node: FoodNode, level: number) => {
     return {
@@ -102,25 +71,100 @@ export class ClassUnitTreeComponent {
 
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
-  constructor() {
-    this.dataSource.data = TREE_DATA;
-  }
-
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
-  addFile() {
+  constructor(){}
+
+  public unit!: Unit;
+  private dialog = inject(MatDialog)
+  private dbService = inject(DbService)
+  private cacheService = inject(CacheService)
+  public loaddingService = inject(LoaddingService)
+  private notificationService = inject(NotificationService)
+  private authService = inject(AuthenticationService)
+
+  @Input() teacher_areas:any[]= [];
+
+  @Input()
+  set _unit(value: Unit) {
+    this.unit = value;
+    this.teacher_areas = this.cacheService.cacheClassUnit[`id-${this.unit.id_unit}`] || []
+    this.dataSource.data = this.teacher_areas;
+  }
+
+
+  ngOnInit(): void {
+    this.getDataAreasWithTeacherAndClassUnit();
+  }
+
+  getDataAreasWithTeacherAndClassUnit(){
+
+    const userRoles = this.authService.getUserAuth.roles.map(role => role.name.toUpperCase());
+    const isDocenteUser = userRoles.includes(this.authService.role.DOCENTE_USER);
+    const isCoordinatorUser = userRoles.includes(this.authService.role.COORD_USER);
+
+    const data = {
+      id_ie_teacher: this.cacheService.getIdIETeacher(),
+      id_unit: this.unit.id_unit
+    };
+    if (isDocenteUser && !isCoordinatorUser && userRoles.length === 1) {
+      this.getAreasWithTeacherAndClassUnit(data);
+    } else {
+      this.getAreasWithTeachersAndClassUnitAll(data);
+    }
+
+  }
+
+  getAreasWithTeacherAndClassUnit({ id_ie_teacher, id_unit}: any) {
+    this.dbService.getAreasWithTeacherAndClassUnit({id_ie_teacher, id_unit})
+      .subscribe({
+        next: (data) => {
+          this.dataSource.data = data;
+        },
+        error: (err) => {
+          console.error('Error fetching areas:', err);
+        }
+      });
+  }
+
+  getAreasWithTeachersAndClassUnitAll({ id_unit }: any) {
+    this.dbService.getAreasWithTeachersAndClassUnitAll({id_unit})
+      .subscribe({
+        next: (data) => {
+          this.dataSource.data = data;
+        },
+        error: (err) => {
+          console.error('Error fetching areas:', err);
+        }
+      });
+  }
+
+  addFile(id_teacher_area:number) {
+
+    if(!id_teacher_area){
+      this.notificationService.warning('Validación de datos', 'El id del docente asignado al área es requerido')
+      return;
+    }
+
+    if(!this.unit.id_unit){
+      this.notificationService.warning('Validación de datos', 'El id de la programación académica es requerido')
+      return;
+    }
 
     const dialogRef = this.dialog.open(LoadFileComponent, {
-      data: {name: "Messy", animal: "cat"},
+      data: {
+        'id_teacher_area':id_teacher_area,
+        'id_unit':this.unit.id_unit
+      },
       disableClose: true,
       autoFocus: false,
       panelClass:'dialog-class',
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
+    dialogRef.afterClosed().subscribe(res => {
+      if(res){
+        this.getDataAreasWithTeacherAndClassUnit();
+      }
     });
-
   }
 }

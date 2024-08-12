@@ -11,32 +11,39 @@
           <mat-label>Tipo de documento</mat-label>
           <mat-select formControlName="type_id_card">
             @for (item of listTypeDocuments; track $index) {
-              <mat-option value="dni">{{item.label}}</mat-option>
+              <mat-option [value]="item.code">{{item.label}}</mat-option>
             }
           </mat-select>
           @if (type_id_card.hasError('pattern') && !type_id_card.hasError('required')) {
             <mat-error class="p-error">Digite un DNI <strong>válido</strong></mat-error>
           }
-          @if (type_id_card.hasError('required') && type_id_card.touched) {
+          @else if (type_id_card.hasError('required') && type_id_card.touched) {
             <mat-error class="p-error">El campo <strong>requerido</strong></mat-error>
           }
         </mat-form-field>
       </td>
-      <td></td>
       <td>
         <mat-form-field class="w-full" appearance="outline">
           <mat-label>DNI</mat-label>
           <input matInput formControlName="id_card" maxlength="8" minlength="8">
+          <button type="button"
+                  *ngIf="type_id_card.value=='DNI'"
+                  mat-icon-button
+                  matSuffix
+                  (click)="validateTeacher()">
+            <mat-icon>search</mat-icon>
+          </button>
+
           @if (id_card.hasError('pattern') && !id_card.hasError('required')) {
             <mat-error class="p-error">Digite un documento <strong>válido</strong></mat-error>
           }
-          @if (id_card.hasError('required') && id_card.touched) {
+          @else if (id_card.hasError('required') && id_card.touched) {
             <mat-error class="p-error">El campo <strong>requerido</strong></mat-error>
           }
-          @if (id_card.hasError('minlength')) {
+          @else if (id_card.hasError('minlength')) {
             <mat-error class="p-error">El debe tener mínimo 8 <strong>caracteres</strong></mat-error>
           }
-          @if (id_card.hasError('maxlength')) {
+          @else if (id_card.hasError('maxlength')) {
             <mat-error class="p-error">El debe tener máximo 8 <strong>caracteres</strong></mat-error>
           }
         </mat-form-field>
@@ -49,10 +56,10 @@
       @if (names.hasError('pattern') && !email.hasError('required')) {
         <mat-error>Digite un nombre válido</mat-error>
       }
-      @if (names.hasError('required')) {
+      @else if (names.hasError('required')) {
         <mat-error>Este campo es <strong>requerido</strong></mat-error>
       }
-      @if (names.hasError('pattern') && !names.hasError('required')) {
+      @else if (names.hasError('pattern') && !names.hasError('required')) {
         <mat-error class="p-error">Digite un nombre <strong>válido</strong></mat-error>
       }
     </mat-form-field>
@@ -66,7 +73,7 @@
             @if (first_name.hasError('pattern') && !first_name.hasError('required')) {
               <mat-error>Digite un apellido válido</mat-error>
             }
-            @if (first_name.hasError('required')) {
+            @else if (first_name.hasError('required')) {
               <mat-error>Este campo es <strong>requerido</strong></mat-error>
             }
           </mat-form-field>
@@ -79,7 +86,7 @@
           @if (last_name.hasError('pattern') && !last_name.hasError('required')) {
             <mat-error>Digite un apellido válido</mat-error>
           }
-          @if (last_name.hasError('required')) {
+          @else if (last_name.hasError('required')) {
             <mat-error>Este campo es <strong>requerido</strong></mat-error>
           }
         </mat-form-field>
@@ -93,30 +100,30 @@
       @if (email.hasError('email') && !email.hasError('required')) {
         <mat-error>Digite un email válido</mat-error>
       }
-      @if (email.hasError('required')) {
+      @else if (email.hasError('required')) {
         <mat-error>Este campo es <strong>requerido</strong></mat-error>
       }
     </mat-form-field>
 
     <mat-form-field class="w-full mt-1" appearance="outline">
       <mat-label>Número de celular</mat-label>
-      <input type="text" matInput formControlName="phone_number" [errorStateMatcher]="matcher">
+      <input type="text" matInput formControlName="phone_number" [errorStateMatcher]="matcher" maxlength="9">
       @if (phone_number.hasError('pattern') && !phone_number.hasError('required')) {
         <mat-error>Digite un número de celular válido</mat-error>
       }
-      @if (phone_number.hasError('required')) {
+      @else if (phone_number.hasError('required')) {
         <mat-error>Este campo es <strong>requerido</strong></mat-error>
       }
-      @if (phone_number.hasError('maxlength')) {
+      @else if (phone_number.hasError('maxlength')) {
         <mat-error>El número de celular debe tener máximo 9 <strong>dígitos</strong></mat-error>
       }
-      @if (phone_number.hasError('minlength')) {
+      @else if (phone_number.hasError('minlength')) {
         <mat-error>El número de celular debe tener mínimo 9 <strong>dígitos</strong></mat-error>
       }
     </mat-form-field>
     <div align="end">
       <button mat-button type="button" class="mr-1" (click)="closeDialog()">Cancelar</button>
-      <button mat-flat-button type="button" (click)="registerTeacher()">Registrar</button>
+      <button mat-flat-button type="button" (click)="registerTeacher()" [disabled]="loadingService.getLoadding()">Registrar</button>
     </div>
   </form>
 </div>

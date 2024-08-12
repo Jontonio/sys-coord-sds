@@ -26,13 +26,23 @@ export class TeacherListComponent {
   readonly dialog = inject(MatDialog);
   dbService = inject(DbService);
   cacheService = inject(CacheService);
+  length:number = 0;
 
   constructor() {
+    // initializate cache
+    this.dataSource = this.cacheService.cachePageTeacher.teachers;
   }
 
   ngOnInit(): void {
     if(this.cacheService.getCodeModularUser()){
       const data = { modular_code: this.cacheService.getCodeModularUser() }
+      this.getInstitutionTeachersFromIE(data);
+    }
+  }
+
+  pageIndexEvent(pageIndex: number){
+    if(this.cacheService.getCodeModularUser()){
+      const data = { modular_code: this.cacheService.getCodeModularUser(), pageIndex}
       this.getInstitutionTeachersFromIE(data);
     }
   }
@@ -55,11 +65,12 @@ export class TeacherListComponent {
     });
   }
 
-  getInstitutionTeachersFromIE({modular_code, id_academic_calendar}:any){
+  getInstitutionTeachersFromIE({modular_code, id_academic_calendar, pageIndex}:any){
 
-    this.dbService.getInstitutionTeachers({modular_code, id_academic_calendar} as any).subscribe({
+    this.dbService.getInstitutionTeachers({modular_code, id_academic_calendar, pageIndex} as any).subscribe({
       next:({ data }) => {
         this.dataSource = data.data;
+        this.length = data.total;
       },
     })
   }

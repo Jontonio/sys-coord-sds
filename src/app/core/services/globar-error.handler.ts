@@ -9,8 +9,6 @@ export class GlobalErrorHandler implements ErrorHandler {
 
     handleError(error: Error) {
         // Obtain dependencies at the time of the error
-        // This is because the GlobalErrorHandler is registered first
-        // which prevents constructor dependency injection
         const logger = this.injector.get(NGXLogger);
 
         const err = {

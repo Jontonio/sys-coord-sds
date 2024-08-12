@@ -18,7 +18,7 @@ export default class TeacherHomeComponent {
   private cdRef = inject(ChangeDetectorRef);
 
   constructor() {
-    this.titleService.setTitle('Docentes');
+    this.titleService.setTitle('SIRAUN | Docentes');
   }
 
   onTabChange(event: MatTabChangeEvent): void {

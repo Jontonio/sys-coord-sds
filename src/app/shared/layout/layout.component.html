@@ -11,7 +11,7 @@
 
     <a class="navbar-brand">
       <h1>
-        SISCOOR
+        SIRAUN
       </h1>
     </a>
 
@@ -24,7 +24,7 @@
       @else if(cacheService.getAcademicCalendar()) {
         <button mat-button color="primary">
           <span fxShow fxHide.xs>
-            Calendario académico - {{cacheService.getAcademicCalendar().academic_calendar_year}}
+            Calendario Acádemico {{cacheService.getAcademicCalendar().academic_calendar_year}}
           </span>
         </button>
       }
@@ -34,9 +34,9 @@
         </button>
       }
 
-    <button mat-icon-button [matMenuTriggerFor]="notificationMenu">
+    <!-- <button mat-icon-button [matMenuTriggerFor]="notificationMenu">
       <mat-icon [matBadge]="2" aria-hidden="false">notifications</mat-icon>
-    </button>
+    </button> -->
 
     <mat-menu #notificationMenu="matMenu" xPosition="before" yPosition="above" [overlapTrigger]="false">
 
@@ -59,14 +59,14 @@
     </button>
    <mat-menu #userMenu="matMenu" xPosition="before" yPosition="above" [overlapTrigger]="false">
 
-     <a mat-menu-item [routerLink]="['/account/profile']">
+     <a mat-menu-item disabled="true">
        <mat-icon>person</mat-icon>
-       <span>Account</span>
+       <span>Mi perfil</span>
      </a>
 
-     <a mat-menu-item [routerLink]="['/auth/login']">
+     <a mat-menu-item (click)="logout()">
        <mat-icon>exit_to_app</mat-icon>
-       <span>Log out</span>
+       <span>Cerrar sesión</span>
      </a>
 
    </mat-menu>
@@ -78,8 +78,13 @@
     <!-- Side nav -->
     <mat-sidenav #snav [opened]="!mobileQuery.matches" [mode]="mobileQuery.matches ? 'over' : 'side'"
       [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" class="sidenav">
-
-      <mat-nav-list class="m-2">
+      @if (cacheService.getInstitution()) {
+        <div class="text-center container-title-ie">
+          <p class="m-0 title-ie">I.E. {{cacheService.getInstitution().name_ie}}</p>
+          <span>Código modular - {{cacheService.getInstitution().modular_code}}</span>
+        </div>
+      }
+      <mat-nav-list class="mr-2 ml-2">
         @for (item of listRoutes; track $index) {
           <div *showForRoles="item.permitRoles">
             <a mat-list-item
@@ -98,7 +103,7 @@
         <a mat-list-item class="mt-1" (click)="logout()">
           <div class="flex align-items-center align-content-center">
             <ng-icon name="featherLogOut" size="20"></ng-icon>
-            <span class="ml-2" mat-line> Log out </span>
+            <span class="ml-2" mat-line> Cerrar sesión </span>
           </div>
         </a>
 

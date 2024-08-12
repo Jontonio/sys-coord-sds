@@ -1,31 +1,47 @@
 <div class="flex ai-center p-1 w-full justify-content-between mt-1">
-  <div class="flex justify-content-center align-items-center">
+  <div class="flex justify-content-center align-items-center" [ngClass]="{'verified': classUnit.verified==true, 'un-verified': classUnit.verified==false}">
     <mat-icon class="mr-3">
       <ng-icon name="featherFileText"></ng-icon>
     </mat-icon>
     <div class="flex flex-column flex-grow-1">
-      <span class="file-name">flowbite</span>
-      <span class="file-type">PDF, 2.3 MB</span>
+      @if (classUnit) {
+        <span class="file-name">{{classUnit.class_unit_title | slice:0:20 | uppercase}}
+          {{classUnit.class_unit_title.length>20?'...':''}}
+        </span>
+        <span class="msg-recive">
+          <ng-icon name="featherMessageCircle"></ng-icon>
+          {{classUnit.recive_msg}}
+        </span>
+      }
     </div>
   </div>
-  <div>
-    <button mat-icon-button class="btn-icon">
-        <ng-icon name="featherDownload"></ng-icon>
-    </button>
+  <div class="flex justify-content-center align-items-center" >
     <button mat-icon-button class="btn-icon" (click)="previewFile()">
         <ng-icon name="featherEye"></ng-icon>
     </button>
-    <button mat-icon-button [matMenuTriggerFor]="menu">
+    <button mat-icon-button [matMenuTriggerFor]="menu" class="btn-icon">
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item>
+      <ng-container *showForRoles="['ROOT_USER','DIRECTOR_USER','UGEL_USER','COORD_USER']">
+        <button mat-menu-item (click)="updateChecked(classUnit)">
+          <mat-icon>
+            @if (classUnit.verified==true) {
+              <ng-icon name="featherXCircle"></ng-icon>
+            }@else {
+              <ng-icon name="featherCheckCircle"></ng-icon>
+            }
+          </mat-icon>
+          <span>Marcar como {{classUnit.verified==true?'no verificado':'verificado'}}</span>
+        </button>
+      </ng-container>
+      <button mat-menu-item disabled="true">
         <mat-icon>delete</mat-icon>
-        <span>Delete</span>
+        <span>Eliminar</span>
       </button>
-      <button mat-menu-item>
+      <button mat-menu-item disabled="true">
         <mat-icon>edit</mat-icon>
-        <span>Edit</span>
+        <span>Editar</span>
       </button>
     </mat-menu>
   </div>

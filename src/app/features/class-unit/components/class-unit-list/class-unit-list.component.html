@@ -8,14 +8,32 @@
     </div>
   </div>
   <mat-card>
+
+    @if (loadingService.getLoadding() && programamAcademics.length==0) {
       <div class="p-3">
-      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-        @for (item of [1, 2, 3, 4, 5]; track $index) {
-          <mat-tab label="{{'Periodo '+(($index+1) | toRoman)}}">
-            <app-class-unit-tree/>
-          </mat-tab>
-        }
-      </mat-tab-group>
-    </div>
+        @for (item of [1,2,3,4,5]; track $index) {
+            <app-skeleton />
+          }
+      </div>
+    }
+
+    @if (!loadingService.getLoadding() && programamAcademics.length==0) {
+      <app-show-empty-message/>
+    }@else {
+
+      <div class="p-3">
+        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" (selectedTabChange)="onTabChange($event)">
+          @for (item of programamAcademics; track $index) {
+            <mat-tab label="{{'Periodo '+item.academic_program_bim}}">
+              <ng-container *ngIf="selectedIndex == $index">
+                <app-unit-item-tree [_unit_list]="item.unit"></app-unit-item-tree>
+              </ng-container>
+            </mat-tab>
+          }
+        </mat-tab-group>
+      </div>
+
+    }
   </mat-card>
 </div>
+

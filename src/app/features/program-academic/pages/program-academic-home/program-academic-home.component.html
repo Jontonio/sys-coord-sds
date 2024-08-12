@@ -1,9 +1,14 @@
-<div class="flex justify-content-between flex-wrap">
-  <div class="col">
-    <h4 class="m-0">Programación académica</h4>
-    <p>Linea de tiempo de la programación académica registrada</p>
+<div *showForRoles="['DOCENTE_USER']">
+  <div class="flex justify-content-between flex-wrap">
+    <div class="col">
+      <h4 class="m-0">Programación académica</h4>
+      <p>Linea de tiempo de la programación académica registrada</p>
+    </div>
+    <div class="col flex align-items-center justify-content-end">
+    </div>
   </div>
-  <div class="col flex align-items-center justify-content-end">
-  </div>
+  <app-time-line/>
 </div>
-<app-time-line/>
+<div *showForRoles="['DIRECTOR_USER','UGEL_USER','ROOT_USER']">
+  <app-list-program-academic/>
+</div>

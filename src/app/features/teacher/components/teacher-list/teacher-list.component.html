@@ -7,12 +7,15 @@
       <p>La tabla muestra docentes registrados</p>
     </div>
     <div class="col flex align-items-center justify-content-end">
-      <button class="flex justify-content-center align-items-center" mat-mini-fab aria-label="Agregar nuevo docente" (click)="addTeacher()">
+      <button class="flex justify-content-center align-items-center"
+              mat-mini-fab aria-label="Agregar nuevo docente"
+              [disabled]="!cacheService.getAcademicCalendar()"
+              (click)="addTeacher()">
         <mat-icon>
           <ng-icon name="featherPlus" size="25"></ng-icon>
         </mat-icon>
       </button>
     </div>
   </div>
-  <app-teacher-table [dataSource]="dataSource"></app-teacher-table>
+  <app-teacher-table [dataSource]="dataSource" [length]="length" (pageIndexEvent)="pageIndexEvent($event)"></app-teacher-table>
 </div>

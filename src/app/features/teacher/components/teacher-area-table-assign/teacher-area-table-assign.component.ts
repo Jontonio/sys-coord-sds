@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { MaterialModule } from '../../../../material/custom-material.module';
 import { InstitutionTeacher } from '../../../interface/InstitutionTeacher';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,6 +10,7 @@ import { ShowEmptyMessageComponent } from '../../../../shared/components/show-em
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { iconsList } from '../../../../shared/icons/icons';
 import { heroUsers } from '@ng-icons/heroicons/outline';
+import { PageEvent } from '@angular/material/paginator';
 
 
 export interface PeriodicElement {
@@ -33,7 +34,7 @@ const ELEMENT_DATA: InstitutionTeacher[] = [];
 export class TeacherAreaTableAssignComponent {
 
 
-  displayedColumns: string[] = ['id', 'id_card', 'names', 'contact', 'action'];
+  displayedColumns: string[] = ['id','names','coordinador', 'course', 'action'];
 
   @Input() dataSource = ELEMENT_DATA;
 
@@ -42,8 +43,27 @@ export class TeacherAreaTableAssignComponent {
   notificationService = inject(NotificationService);
   expandedElement: any | null;
 
+  @Output() pageIndexEvent = new EventEmitter<number>();
+  @Input() length:number = 10;
+  pageIndex:number = 0;
+  pageSize:number = 10;
+  startPage:number = 0;
+  endPage:number = 0;
+
   toggleRow(element: any): void {
     this.expandedElement = this.expandedElement === element ? null : element;
+  }
+
+  pageEvent(evn:PageEvent): void {
+
+    this.endPage = evn.pageSize;
+    this.startPage = evn.pageIndex * evn.pageSize;
+    this.endPage = this.startPage + evn.pageSize;
+
+    this.pageIndex = evn.pageIndex + 1;
+
+    this.pageIndexEvent.emit(this.pageIndex);
+
   }
 
   deleteTeacher() {

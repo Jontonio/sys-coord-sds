@@ -7,7 +7,7 @@
 
     <mat-form-field class="w-full mt-1" appearance="outline">
       <mat-label>Nombre de la asignatura</mat-label>
-      <input type="text" matInput formControlName="area_name" [errorStateMatcher]="matcher">
+      <input type="text" matInput formControlName="area_name" [errorStateMatcher]="matcher" maxlength="150">
       @if (area_name.hasError('pattern') && !area_name.hasError('required')) {
         <mat-error>Digite un nombre válido del área</mat-error>
       }
@@ -15,7 +15,7 @@
         <mat-error>Este campo es <strong>requerido</strong></mat-error>
       }
       @else if (area_name.hasError('maxlength') && area_name.touched) {
-        <mat-error class="p-error">El nombre debe tener como máximo <strong>200 caracteres</strong></mat-error>
+        <mat-error class="p-error">El nombre debe tener como máximo <strong>150 caracteres</strong></mat-error>
       }
     </mat-form-field>
 

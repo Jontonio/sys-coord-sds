@@ -1,0 +1,110 @@
+<div class="p-4 mat-dialog-container">
+  <div class="flex flex-column">
+    <h5 class="m-0">{{update?'Actualización de unidad del bimestre':'Registro de unidad del bimestre'}}</h5>
+    <p>Complete todos los campos</p>
+  </div>
+  <div align="end">
+    <form [formGroup]="unitForm" method="post">
+      <mat-form-field class="w-full mt-1" appearance="outline" *showForRoles="['ROOT_USER','UGEL_USER']">
+        <mat-label>id de la programación académica</mat-label>
+        <input type="text" matInput formControlName="id_academic_program">
+        @if (id_academic_program.hasError('pattern') && !id_academic_program.hasError('required')) {
+          <mat-error class="p-error">El calendario académico no es <strong>válido</strong></mat-error>
+        }
+        @else if (id_academic_program.hasError('required') && id_academic_program.dirty) {
+          <mat-error class="p-error">El campo es <strong>requerido</strong></mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field class="w-full mt-1" appearance="outline">
+        <mat-label>Unidad</mat-label>
+        <mat-select formControlName="unit_name">
+          @for (item of ['0','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV']; track $index) {
+            <mat-option [value]="item">Unidad {{item}}</mat-option>
+          }
+        </mat-select>
+        @if (unit_name.hasError('pattern') && !unit_name.hasError('required')) {
+          <mat-error class="p-error">El campo periodo no es <strong>válido</strong></mat-error>
+        }
+        @else if (unit_name.hasError('required') && unit_name.touched) {
+          <mat-error class="p-error">El campo es <strong>requerido</strong></mat-error>
+        }
+      </mat-form-field>
+
+      <table class="w-full mt-1" cellspacing="1">
+        <tr>
+          <td>
+            <mat-form-field class="w-full mt-1" appearance="outline">
+              <mat-label>Fecha inicio unidad</mat-label>
+              <input matInput [matDatepicker]="pickerStart" formControlName="unit_start">
+              <mat-hint></mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="pickerStart"></mat-datepicker-toggle>
+              <mat-datepicker #pickerStart></mat-datepicker>
+              @if (unit_start.hasError('pattern') && !unit_start.hasError('required')) {
+                <mat-error class="p-error">El campo fecha de inicio no es <strong>válido</strong></mat-error>
+              }
+              @else if (unit_start.hasError('required') && unit_start.touched) {
+                <mat-error class="p-error">El campo es <strong>requerido</strong></mat-error>
+              }
+            </mat-form-field>
+          </td>
+          <td></td>
+          <td>
+            <mat-form-field class="w-full mt-1" appearance="outline">
+              <mat-label>Fecha de final de unidad</mat-label>
+              <input matInput [matDatepicker]="pickerFinish" formControlName="unit_finish">
+              <mat-hint></mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="pickerFinish"></mat-datepicker-toggle>
+              <mat-datepicker #pickerFinish></mat-datepicker>
+              @if (unit_finish.hasError('pattern') && !unit_finish.hasError('required')) {
+                <mat-error class="p-error">El campo fecha de final no es <strong>válido</strong></mat-error>
+              }
+              @else if (unit_finish.hasError('required') && unit_finish.touched) {
+                <mat-error class="p-error">El campo es <strong>requerido</strong></mat-error>
+              }
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+      <section align="start" class="mb-2 w-full">
+        <mat-checkbox class="example-margin"
+                      formControlName="showMoreFields"
+                      (click)="changeCheckbox()">Agregar descripción a la unidad</mat-checkbox>
+      </section>
+
+      @if (this.showMoreFields.value) {
+        <ng-container>
+
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Descripción del documento</mat-label>
+            <textarea matInput formControlName="unit_description" maxlength="350"></textarea>
+            @if (unit_description.hasError('pattern') && !unit_description.hasError('required')) {
+              <mat-error class="p-error">El campo descripción no es <strong>válido</strong></mat-error>
+            }
+            @else if (unit_description.hasError('required') && unit_description.touched) {
+              <mat-error class="p-error">El campo es <strong>requerido</strong></mat-error>
+            }
+            @else if (unit_description.hasError('maxlength') && unit_description.touched) {
+              <mat-error class="p-error">El campo debe tener como máximo 350 <strong>caracteres</strong></mat-error>
+            }
+          </mat-form-field>
+        </ng-container>
+      }
+      <button mat-button
+              aria-hidden="false"
+              type="reset"
+              class="mr-1"
+              (click)="closeDialog()">Cancelar</button>
+      <button mat-flat-button
+              aria-hidden="false"
+              type="button"
+              (click)="save()"
+              [disabled]="!cacheService.getAcademicCalendar() || _loading.getLoadding()">
+              @if(_loading.getLoadding()){
+                <loading-save/>
+              }@else {
+                Guardar
+              }
+            </button>
+    </form>
+  </div>
+</div>

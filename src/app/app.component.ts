@@ -11,6 +11,6 @@ import { LoaddingService } from './core/services/loadding.service';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'sdsSoft';
+  title = 'SIRAUN';
   public loadingService = inject(LoaddingService);
 }

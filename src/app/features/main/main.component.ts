@@ -17,7 +17,15 @@ export default class MainComponent {
   public cacheService = inject(CacheService);
 
   constructor () {
+
+    if(this.cacheService.getCodeModularUser()){
+      const cod_modular = this.cacheService.getCodeModularUser();
+      this.dbService.getInstitution(cod_modular!).subscribe({
+        next:({ data }) => this.cacheService.setInstitution(data)
+      })
+    }
     this.getCurrentAcademicCalendar();
+
   }
 
   getCurrentAcademicCalendar() {

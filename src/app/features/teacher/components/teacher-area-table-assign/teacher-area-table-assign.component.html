@@ -4,13 +4,7 @@
     <!-- Position Column -->
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef> No. </th>
-      <td mat-cell *matCellDef="let element; let i=index"> {{i+1}} </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="id_card">
-      <th mat-header-cell *matHeaderCellDef> Documento </th>
-      <td mat-cell *matCellDef="let element"> {{element.teacher.id_card}} </td>
+      <td mat-cell *matCellDef="let element; let i=index"> {{i+1+startPage}} </td>
     </ng-container>
 
     <!-- Name Column -->
@@ -19,10 +13,16 @@
       <td mat-cell *matCellDef="let element"> {{element.teacher.names}} {{element.teacher.first_name}} {{element.teacher.last_name}}</td>
     </ng-container>
 
+    <!-- Name Column -->
+    <ng-container matColumnDef="coordinador">
+      <th mat-header-cell *matHeaderCellDef> ¿Coodinador? </th>
+      <td mat-cell *matCellDef="let element">{{element.id_college?'Si':'No'}}</td>
+    </ng-container>
+
 
     <!-- Weight Column -->
-    <ng-container matColumnDef="contact">
-      <th mat-header-cell *matHeaderCellDef> email </th>
+    <ng-container matColumnDef="course">
+      <th mat-header-cell *matHeaderCellDef> Asignatura - grado y sección </th>
       <td mat-cell *matCellDef="let element">
         <ul>
           @for (item of element.teacher_area; track $index) {
@@ -60,5 +60,11 @@
   @if (!loadingService.getLoadding() && dataSource.length==0) {
     <app-show-empty-message/>
   }
+
+  <mat-paginator  [length]="length"
+                  [pageSize]="pageSize"
+                  [pageIndex]="pageIndex - 1"
+                  (page)="pageEvent($event)"
+                  aria-label="Select page"></mat-paginator>
 
 </mat-card>

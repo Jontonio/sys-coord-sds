@@ -30,7 +30,7 @@ export class SchoolSubjectFormComponent {
 
   createForm() {
     this.formSchoolSubject = new FormGroup({
-      area_name: new FormControl(null, [ Validators.required, Validators.maxLength(200)]),
+      area_name: new FormControl(null, [ Validators.required, Validators.maxLength(150)]),
     })
   }
 

@@ -8,5 +8,5 @@
     <div class="col flex align-items-center justify-content-end">
     </div>
   </div>
-  <app-teacher-area-table-assign [dataSource]="dataSource"></app-teacher-area-table-assign>
+  <app-teacher-area-table-assign [dataSource]="dataSource" [length]="length" (pageIndexEvent)="pageIndexEvent($event)"></app-teacher-area-table-assign>
 </div>

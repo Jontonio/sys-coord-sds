@@ -5,5 +5,5 @@ export const environment = {
   logLevel: NgxLoggerLevel.OFF,
   serverLogLevel: NgxLoggerLevel.ERROR,
   URL_API_RENIEC:'https://api.apis.net.pe/v1/dni?numero=',
-  URL_BASE:'https://server-sirdan.sofdaan.com/api'
+  URL_BASE:'https://siraun-server.sofdaan.com/api'
 };

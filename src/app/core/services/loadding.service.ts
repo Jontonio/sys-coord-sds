@@ -1,33 +1,27 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 
 @Injectable({
     providedIn: 'root'
 })
 export class LoaddingService {
 
-    private loadding:boolean;
+    private loadding = signal(false);
+    private showLoading = computed(() => this.loadding());
+    public message = '';
 
-    message:string;
-
-    constructor() {
-        this.loadding = false;
-        this.message = '';
+    setLoadding(loadding: boolean) {
+        this.loadding.update((() => loadding))
     }
 
-    setLoadding(loadding:boolean){
-        this.loadding = loadding;
+    getLoadding() {
+        return this.showLoading();
     }
 
-    getLoadding(){
-        return this.loadding;
-    }
-
-    setMessage(msg:string){
+    setMessage(msg: string) {
         this.message = msg;
     }
 
-    getMessage(){
+    getMessage() {
         return this.message;
     }
-
 }

@@ -1,17 +1,65 @@
 import { Injectable } from "@angular/core";
 import { AcademicCalendar } from "../../features/interface/AcademicCalendar";
+import { CacheAcademicProgram, CacheClassUnit, CachePageArea, CachePageTeacher } from "../../features/interface/Cache";
+import { InstitutionTeacher } from "../../features/interface/InstitutionTeacher";
+import { Institution } from "../../features/interface/Institutions";
 
 
 @Injectable({
     providedIn:'root',
 })
-export class CacheService{
+export class CacheService {
 
-    private currectAcademicCalendar!:AcademicCalendar;
-    private code_modular_user:string | null;
+    private institution!: Institution;
+    private currectAcademicCalendar!: AcademicCalendar;
+    private code_modular_user: string | null;
+    private id_ie_teacher: number | null;
+    public cachePageTeacher: CachePageTeacher;
+    public cachePageArea: CachePageArea;
+    public cacheClassUnit: CacheClassUnit;
+    public cacheAcademicProgram: CacheAcademicProgram;
+
 
     constructor(){
+
       this.code_modular_user = null;
+      this.id_ie_teacher = null;
+
+      this.cachePageTeacher = {
+        currentPage: 1,
+        startPage: 0,
+        teachers: [],
+      }
+
+      this.cacheAcademicProgram = {
+        currentPage: 1,
+        startPage: 0,
+        academicProgram: [],
+      }
+
+      this.cachePageArea = {
+        currentPage: 1,
+        startPage: 0,
+        areas: [],
+      }
+
+      this.cacheClassUnit = {}
+    }
+
+    setInstitution(institution:Institution){
+      this.institution = institution;
+    }
+
+    getInstitution(){
+      return this.institution;
+    }
+
+    setIdIETeacher(id_ie_teacher:number){
+      this.id_ie_teacher = id_ie_teacher;
+    }
+
+    getIdIETeacher(){
+      return this.id_ie_teacher;
     }
 
     setCodeModularUser(code:string){
@@ -53,4 +101,5 @@ export class CacheService{
     getLocalStorage(key:string){
         return localStorage.getItem(key);
     }
+
 }

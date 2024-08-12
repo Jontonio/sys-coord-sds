@@ -96,7 +96,7 @@ export const routes: Routes = [
           }
         ],
         canActivate:[roleGuard],
-        data:{ rolesPermitidos:['ROOT_USER','UGEL_USER','DIRECTOR_USER'] }
+        data:{ rolesPermitidos:['ROOT_USER','UGEL_USER'] }
       },
       {
         path: 'unidades-de-clase',
@@ -120,7 +120,7 @@ export const routes: Routes = [
           }
         ],
         canActivate:[roleGuard],
-        data:{ rolesPermitidos:['DOCENTE_USER'] }
+        data:{ rolesPermitidos:['DOCENTE_USER','DIRECTOR_USER'] }
       }
     ],
     canActivate:[authGuard]

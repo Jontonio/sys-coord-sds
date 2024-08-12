@@ -10,6 +10,14 @@ import { CacheService } from './cache.service';
 import { Router } from '@angular/router';
 import { CurrentUser } from '../class/UserAuth';
 
+enum Role {
+  USER_ROOT = "USER_ROOT",
+  UGEL_USER = "UGEL_USER",
+  DIRECTOR_USER = "DIRECTOR_USER",
+  COORD_USER = "COORD_USER",
+  DOCENTE_USER = "DOCENTE_USER",
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -20,13 +28,14 @@ export class AuthenticationService {
   private chacheService = inject(CacheService);
   private router = inject(Router);
   private userAuth!:CurrentUser;
+  public role = Role;
 
   private listRoles : string[] = [
     'USER_ROOT',
     'UGEL_USER',
     'DIRECTOR_USER',
     'COORD_USER',
-    'DOCENTE',
+    'DOCENTE_USER',
   ]
 
   constructor(private http:HttpClient) {
@@ -62,6 +71,7 @@ export class AuthenticationService {
     return this.http.get(`${this.URL}/user-check`).pipe(
       tap(({ data }: any) => {
         this.chacheService.setCodeModularUser(data.cod_modular_ie?data.cod_modular_ie:null);
+        this.chacheService.setIdIETeacher(data.id_ie_teacher?data.id_ie_teacher:null);
         this.setUserAuth(data);
       })
     )

@@ -1,6 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { MaterialModule } from '../../../material/custom-material.module';
 import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
+import { ClassUnit } from '../../../features/interface/ClassUnit';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-preview-file',
@@ -11,6 +13,13 @@ import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
 })
 export class PreviewFileComponent {
 
-  @Input() fileURL:string = 'https://www2.congreso.gob.pe/sicr/cendocbib/con2_uibd.nsf/9AF0DD37C68D813B05257791006F5850/$FILE/Bio_Jos%C3%A9_Mar%C3%ADa_Arguedas.pdf';
+  readonly data = inject<ClassUnit>(MAT_DIALOG_DATA);
 
+  @Input() fileURL:string = '';
+
+  constructor() {
+    if(this.data){
+      this.fileURL = this.data.class_unit_file_url;
+    }
+  }
 }
